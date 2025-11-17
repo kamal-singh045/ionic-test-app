@@ -1,2 +1,81 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+:root {
+  // Custom Color Variables - Red Theme
+  --app-primary: #dc2626;          // Bold Red
+  --app-primary-light: #ef4444;    // Light Red
+  --app-primary-dark: #b91c1c;     // Dark Red
+  
+  --app-secondary: #f97316;        // Orange
+  --app-tertiary: #a855f7;         // Purple
+  --app-success: #10b981;          // Green
+  --app-warning: #f59e0b;          // Amber
+  --app-danger: #dc2626;           // Red
+  --app-dark: #1f2937;             // Dark Gray
+  --app-medium: #6b7280;           // Medium Gray
+  --app-light: #f3f4f6;            // Light Gray
+
+  // Custom Theme Colors
+  --app-background: #ffffff;
+  --app-surface: #f9fafb;          // Slightly off-white
+  --app-text-primary: #111827;     // Almost black
+  --app-text-secondary: #6b7280;   // Gray
+  --app-text-tertiary: #9ca3af;    // Light gray
+  --app-border-color: #e5e7eb;
+  --app-shadow: rgba(220, 38, 38, 0.1);  // Red tinted shadow
+  --app-shadow-light: rgba(0, 0, 0, 0.05);
+
+  // Accent Colors
+  --app-accent-pink: #ec4899;
+  --app-accent-teal: #14b8a6;
+  --app-accent-indigo: #6366f1;
+
+  // Custom Spacing
+  --app-spacing-xs: 4px;
+  --app-spacing-sm: 8px;
+  --app-spacing-md: 16px;
+  --app-spacing-lg: 24px;
+  --app-spacing-xl: 32px;
+  --app-spacing-2xl: 48px;
+
+  // Custom Border Radius
+  --app-border-radius-sm: 6px;
+  --app-border-radius-md: 12px;
+  --app-border-radius-lg: 16px;
+  --app-border-radius-xl: 24px;
+  --app-border-radius-full: 9999px;
+
+  // Custom Font Sizes
+  --app-font-size-xs: 12px;
+  --app-font-size-sm: 14px;
+  --app-font-size-md: 16px;
+  --app-font-size-lg: 18px;
+  --app-font-size-xl: 20px;
+  --app-font-size-2xl: 24px;
+  --app-font-size-3xl: 30px;
+
+  // Custom Font Weights
+  --app-font-weight-normal: 400;
+  --app-font-weight-medium: 500;
+  --app-font-weight-semibold: 600;
+  --app-font-weight-bold: 700;
+}
+
+// Dark mode variants
+@media (prefers-color-scheme: dark) {
+  :root {
+    --app-background: #0f172a;
+    --app-surface: #1e293b;
+    --app-text-primary: #f1f5f9;
+    --app-text-secondary: #cbd5e1;
+    --app-text-tertiary: #94a3b8;
+    --app-border-color: #334155;
+    --app-shadow: rgba(220, 38, 38, 0.2);
+    
+    // Adjust red for dark mode (slightly lighter for better contrast)
+    --app-primary: #ef4444;
+    --app-primary-light: #f87171;
+    --app-primary-dark: #dc2626;
+  }
+}

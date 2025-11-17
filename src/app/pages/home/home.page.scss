@@ -1,0 +1,20 @@
+#container {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--app-spacing-md);
+
+  .gallery-redirect-btn {
+    margin: var(--app-spacing-md) 0;
+    --background: var(--app-tertiary);
+    --color: white;
+    text-transform: none;
+  }
+}
+
+#container strong {
+  font-size: 20px;
+  line-height: 26px;
+}

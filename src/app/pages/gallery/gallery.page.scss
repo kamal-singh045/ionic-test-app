@@ -1,0 +1,19 @@
+ion-grid {
+  ion-row {
+    ion-col {
+      ion-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border: 1px solid white;
+      }
+    }
+  }
+}
+
+ion-button {
+  margin: var(--app-spacing-md) 0;
+  --background: var(--app-tertiary);
+  --color: white;
+  text-transform: none;
+}

@@ -1,0 +1,25 @@
+<ion-menu contentId="main-content" menuId="main-menu">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Photo Gallery</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list>
+        @for (menuItem of menuItems; track menuItem.title) {
+          <ion-menu-toggle auto-hide="false">
+            <ion-item
+              button
+              [routerLink]="menuItem.url"
+              routerDirection="root"
+              routerLinkActive="active-menu-item"
+              [routerLinkActiveOptions]="{exact: true}">
+              <ion-icon [name]="menuItem.icon" slot="start"></ion-icon>
+              <ion-label>{{menuItem.title}}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        }
+      </ion-list>
+    </ion-content>
+</ion-menu>

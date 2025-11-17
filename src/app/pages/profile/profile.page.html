@@ -1,0 +1,109 @@
+<app-app-header title="Profile"></app-app-header>
+
+<ion-content class="ion-padding">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>User Profile</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="profileForm">
+        <ion-list>
+          <!-- Name Field -->
+          <ion-item>
+            <ion-label position="stacked">Name</ion-label>
+            <ion-input
+              formControlName="name"
+              type="text"
+              placeholder="Enter your name"
+            ></ion-input>
+          </ion-item>
+          @if (hasError('name', 'required')) {
+            <div class="error-message">Name is required</div>
+          }
+          @if (hasError('name', 'minlength')) {
+            <div class="error-message">Name should be at least 3 characters</div>
+          }
+
+          <!-- Email Field -->
+          <ion-item>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input
+              formControlName="email"
+              type="email"
+              placeholder="Enter your email"
+            ></ion-input>
+          </ion-item>
+          @if (hasError('email', 'required')) {
+            <div class="error-message">Email is required</div>
+          }
+          @if (hasError('email', 'email')) {
+            <div class="error-message">Invalid email format</div>
+          }
+          
+          <!-- Phone Field -->
+          <ion-item>
+            <ion-label position="stacked">Phone</ion-label>
+            <ion-input
+              formControlName="phone"
+              type="tel"
+              placeholder="Enter your phone number"
+            ></ion-input>
+          </ion-item>
+          @if(hasError('phone', 'required')) {
+            <div class="error-message">Phone number is required</div>
+          }
+          @if(hasError('phone', 'pattern')) {
+            <div class="error-message">Invalid phone number format</div>
+          }
+
+          <!-- Designation Dropdown -->
+          <ion-item>
+            <ion-label position="stacked">Designation</ion-label>
+            <ion-select
+              formControlName="designation"
+              placeholder="Select your designation">
+              @for (designation of designations; track designation) {
+                <ion-select-option [value]="designation">{{designation}}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+          @if (hasError('designation', 'required')) {
+            <div class="error-message">Designation is required</div>
+          }
+        </ion-list>
+
+
+        <!-- Action Buttons -->
+        <div class="button-container">
+           @if (!isEditing) {
+              <ion-button expand="block" (click)="enableEdit()">
+                <ion-icon name="create-outline" slot="start"></ion-icon>
+                Edit Profile
+              </ion-button>
+           } @else {
+              <div class="edit-buttons">
+                <ion-button
+                  expand="block"
+                  (click)="saveProfile()"
+                  color="success"
+                  [disabled]="!profileForm.valid"
+                >
+                  <ion-icon name="save-outline" slot="start"></ion-icon>
+                  Save
+                </ion-button>
+                <ion-button
+                  expand="block"
+                  (click)="cancelEdit()"
+                  color="medium"
+                >
+                  <ion-icon name="close-outline" slot="start"></ion-icon>
+                  Cancel
+                </ion-button>
+              </div>
+           }
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
