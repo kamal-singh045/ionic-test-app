@@ -4,7 +4,8 @@
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
-    "dev": "ionic cap run android -l --external",
+    "android": "ionic cap run android -l --external",
+    "ios": "ionic cap run ios -l --external",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -26,8 +27,11 @@
     "@capacitor/app": "7.1.0",
     "@capacitor/camera": "^7.0.2",
     "@capacitor/core": "7.4.4",
+    "@capacitor/geolocation": "^7.1.5",
     "@capacitor/haptics": "7.0.2",
+    "@capacitor/ios": "^7.4.4",
     "@capacitor/keyboard": "7.0.3",
+    "@capacitor/local-notifications": "^7.0.3",
     "@capacitor/preferences": "^7.0.2",
     "@capacitor/status-bar": "7.0.3",
     "@ionic/angular": "^8.0.0",
@@ -64,5 +68,6 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.8.0"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

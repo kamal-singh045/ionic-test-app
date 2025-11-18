@@ -1,0 +1,55 @@
+ion-button {
+  --border-radius: 6px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  font-weight: 500;
+  text-transform: none;
+  margin: 4px 0;
+}
+
+// variants styles
+.btn-primary {
+  --background: var(--app-primary);
+  --color: white;
+}
+
+.btn-secondary {
+  --background: var(--app-secondary);
+  --color: white;
+}
+
+.btn-success {
+  --background: var(--app-success);
+  --color: white;
+}
+
+.btn-danger {
+  --background: var(--app-danger);
+  --color: white;
+}
+
+.btn-warning {
+  --background: var(--app-warning);
+  --color: white;
+}
+
+.btn-gradient {
+  --background: linear-gradient(45deg, var(--app-primary) 0%, var(--app-primary-light) 100%);
+  --color: white;
+  --box-shadow: 0 4px 15px rgba(var(--app-primary-rgb), 0.4);
+}
+
+ion-button[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+ion-spinner {
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  margin-left: 8px;
+  --color: white;
+}

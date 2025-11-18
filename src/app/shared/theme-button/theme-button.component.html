@@ -1,0 +1,20 @@
+<ion-button
+  [ngClass]="buttonClass"
+  [disabled]="disabled || loading"
+  [type]="type"
+  [expand]="expand"
+  [fill]="fill"
+  [size]="size || undefined"
+  (click)="handleClick()"
+  >
+    @if (iconStart) {
+      <ion-icon slot="start" [name]="iconStart"></ion-icon>
+    }
+    {{title}}
+    @if (loading) {
+      <ion-spinner name="crescent"></ion-spinner>
+    }
+    @if (iconEnd) {
+      <ion-icon slot="end" [name]="iconEnd"></ion-icon>
+    }
+</ion-button>

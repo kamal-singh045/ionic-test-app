@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
-import { SideMenuComponent } from './shared/side-menu/side-menu.component';
+// import { SideMenuComponent } from './shared/side-menu/side-menu.component';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +10,7 @@ import { SideMenuComponent } from './shared/side-menu/side-menu.component';
   imports: [
     IonApp,
     IonRouterOutlet,
-    SideMenuComponent
+    // SideMenuComponent
   ],
 })
 export class AppComponent {

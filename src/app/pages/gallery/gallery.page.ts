@@ -3,21 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonHeader,
   IonButton,
-  IonTitle,
-  IonToolbar,
   IonGrid,
   IonRow,
   IonCol,
   IonImg
 } from '@ionic/angular/standalone';
-import {
-  Camera,
-  CameraResultType,
-  CameraSource
-} from '@capacitor/camera';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
+import { CameraService } from 'src/app/services/camera.service';
 
 @Component({
   selector: 'app-gallery',
@@ -27,9 +20,6 @@ import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.compone
   imports: [
     IonContent,
     IonButton,
-    IonHeader,
-    IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     IonGrid,
@@ -43,18 +33,24 @@ export class GalleryPage implements OnInit {
 
   photos: string[] = [];
 
-  constructor() { }
+  constructor(
+    private cameraService: CameraService
+  ) { }
 
   ngOnInit() { }
 
   async takePhoto() {
-    const image = await Camera.getPhoto({
-      quality: 90,
-      allowEditing: false,
-      resultType: CameraResultType.DataUrl,
-      source: CameraSource.Camera
-    });
-
-    image.dataUrl && this.photos.unshift(image.dataUrl);
+    const photo = await this.cameraService.takeOrPickPhoto();
+    console.log({ photo, format: photo?.format });
+    if (photo && photo?.base64String) {
+      const url = `data:image/${photo?.format};base64,${photo.base64String}`;
+      this.photos.unshift(url);
+      // upload to server
+      // body: JSON.stringify({
+      //   image: photo.base64String,
+      //   format: photo?.format,
+      //   filename: `photo_${Date.now()}.${photo?.format}`
+      // })
+    }
   }
 }

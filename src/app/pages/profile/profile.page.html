@@ -62,7 +62,9 @@
             <ion-label position="stacked">Designation</ion-label>
             <ion-select
               formControlName="designation"
-              placeholder="Select your designation">
+              placeholder="Select your designation"
+              interface="popover"
+              >
               @for (designation of designations; track designation) {
                 <ion-select-option [value]="designation">{{designation}}</ion-select-option>
               }
@@ -72,7 +74,6 @@
             <div class="error-message">Designation is required</div>
           }
         </ion-list>
-
 
         <!-- Action Buttons -->
         <div class="button-container">

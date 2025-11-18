@@ -1,9 +1,120 @@
 <app-app-header title="Settings"></app-app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">settings</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <!-- App Preferences Section -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>App Preferences</ion-label>
+    </ion-list-header>
+
+    <!-- Theme Selection -->
+    <ion-item>
+      <ion-icon name="moon-outline" slot="start"></ion-icon>
+      <ion-label>Theme</ion-label>
+      <ion-select
+        [(ngModel)]="settings.theme"
+        (ionChange)="onThemeChange($event)"
+        interface="action-sheet"
+       >
+        <ion-select-option value="light">Light</ion-select-option>
+        <ion-select-option value="dark">Dark</ion-select-option>
+        <ion-select-option value="auto">Auto</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <!-- Language Selection -->
+    <ion-item>
+      <ion-icon name="language-outline" slot="start"></ion-icon>
+      <ion-label>Language</ion-label>
+      <ion-select
+        [(ngModel)]="settings.language"
+        (ionChange)="onLanguageChange($event)"
+        interface="popover"
+       >
+        @for (lang of languages; track lang.code) {
+          <ion-select-option [value]="lang.code">{{lang.name}}</ion-select-option>
+        }
+      </ion-select>
+    </ion-item>
+
+    <!-- Notifications Toggle -->
+    <ion-item>
+      <ion-icon name="notifications-outline" slot="start"></ion-icon>
+      <ion-label>Notifications</ion-label>
+      <ion-toggle
+        [(ngModel)]="settings.notifications"
+        (ionChange)="onNotificationToggle($event)">
+      </ion-toggle>
+    </ion-item>
+
+    <!-- Location Tracking -->
+    <ion-item>
+      <ion-icon name="location-outline" slot="start"></ion-icon>
+      <ion-label>Location Tracking</ion-label>
+      <ion-toggle
+        [(ngModel)]="settings.locationTracking"
+        (ionChange)="onLocationToggle($event)">
+      </ion-toggle>
+    </ion-item>
+  </ion-list>
+
+  <!-- Camera & Media Section -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Camera & Media</ion-label>
+    </ion-list-header>
+
+    <!-- Image Quality -->
+    <ion-item>
+      <ion-icon name="camera-outline" slot="start"></ion-icon>
+      <ion-label>Image Quality</ion-label>
+      <ion-select
+        [(ngModel)]="settings.imageQuality"
+        (ionChange)="onImageQualityChange($event)"
+        interface="popover"
+        >
+        <ion-select-option value="low">Low</ion-select-option>
+        <ion-select-option value="medium">Medium</ion-select-option>
+        <ion-select-option value="high">High</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <!-- Storage & Data Section -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Storage & Data</ion-label>
+    </ion-list-header>
+
+    <!-- Clear Cache -->
+    <ion-item button (click)="clearCache()">
+      <ion-icon name="trash-outline" slot="start" color="danger"></ion-icon>
+      <ion-label color="danger">Clear Cache</ion-label>
+    </ion-item>
+
+    <!-- Reset Settings -->
+    <ion-item button (click)="resetSettings()">
+      <ion-icon name="refresh-outline" slot="start" color="warning"></ion-icon>
+      <ion-label color="warning">Reset Settings</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Account Section -->
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Account</ion-label>
+    </ion-list-header>
+
+    <!-- Logout -->
+    <ion-item>
+      <div class="logout-container">
+        <app-theme-button
+          [title]="'Logout'"
+          [variant]="'primary'"
+          [iconStart]="'log-out-outline'"
+          (handler)="logout()"
+        ></app-theme-button>
+      </div>
+    </ion-item>
+  </ion-list>
 </ion-content>

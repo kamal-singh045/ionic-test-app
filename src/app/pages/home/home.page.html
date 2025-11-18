@@ -1,16 +1,16 @@
 <app-app-header title="Home"></app-app-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <div id="container">
     <strong>Ready to create an app?</strong>
 
-    <ion-button class="gallery-redirect-btn" [routerLink]="['/gallery']">
+    <p>{{isLocationFetching ? 'Fetching Location' : 'Location Fetched'}}</p>
+
+    <p>Notification Permission: {{isNotificationPermissionGranted}}</p>
+
+    <p>Location: {{locationPosition?.coords?.latitude}}, {{locationPosition?.coords?.longitude}} </p>
+
+    <ion-button class="gallery-redirect-btn" [routerLink]="['/tabs/gallery']">
       Go to gallery
     </ion-button>
   </div>

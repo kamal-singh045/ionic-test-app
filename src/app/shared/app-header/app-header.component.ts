@@ -19,8 +19,8 @@ import { menuOutline } from 'ionicons/icons';
     IonHeader,
     IonToolbar,
     IonTitle,
-    IonButtons,
-    IonMenuButton
+    // IonButtons,
+    // IonMenuButton
   ]
 })
 export class AppHeaderComponent implements OnInit {
