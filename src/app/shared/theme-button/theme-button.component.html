@@ -1,10 +1,8 @@
 <ion-button
-  [ngClass]="buttonClass"
+  [ngClass]="buttonClasses"
   [disabled]="disabled || loading"
   [type]="type"
-  [expand]="expand"
   [fill]="fill"
-  [size]="size || undefined"
   (click)="handleClick()"
   >
     @if (iconStart) {

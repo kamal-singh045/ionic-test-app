@@ -6,7 +6,7 @@ import {
 } from '@ionic/angular/standalone';
 import { NgClass } from '@angular/common';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'gradient';
+export type ButtonVariant = 'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'transparent' | 'gradient';
 
 @Component({
   selector: 'app-theme-button',
@@ -28,9 +28,9 @@ export class ThemeButtonComponent implements OnInit {
   @Input() iconEnd?: string;
   @Input() loading?: boolean = false;
   @Input() type?: 'submit' | 'reset' | 'button' = 'button';
-  @Input() expand?: 'block' | 'full' = 'block';
   @Input() fill?: 'clear' | 'outline' | 'solid' = 'solid';
-  @Input() size?: 'small' | 'default' | 'large';
+  @Input() size?: 'sm' | 'md' | 'lg' = 'md';
+  @Input() expand?: 'block' | 'full' = 'block';
 
   // use EventEmitter for output events
   @Output() handler = new EventEmitter<void>();
@@ -45,7 +45,11 @@ export class ThemeButtonComponent implements OnInit {
     }
   }
 
-  get buttonClass(): string {
-    return `btn-${this.variant}`;
+  get buttonClasses() {
+    return [
+      `btn-${this.variant}`,
+      `btn-fill-${this.fill}`,
+      `btn-size-${this.size}`,
+    ];
   }
 }

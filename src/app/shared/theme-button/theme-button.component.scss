@@ -1,50 +1,91 @@
 ion-button {
-  --border-radius: 6px;
-  --padding-start: 16px;
-  --padding-end: 16px;
-  --padding-top: 8px;
-  --padding-bottom: 8px;
-  font-weight: 500;
+  --padding-top: 10px !important;
+  --padding-bottom: 10px !important;
+  --padding-start: 16px !important;
+  --padding-end: 16px !important;
+  --border-radius: 8px;
   text-transform: none;
-  margin: 4px 0;
+  font-weight: 500;
 }
-
-// variants styles
-.btn-primary {
+/* SOLID VARIANTS */
+.btn-primary.btn-fill-solid {
   --background: var(--app-primary);
   --color: white;
 }
 
-.btn-secondary {
+.btn-secondary.btn-fill-solid {
   --background: var(--app-secondary);
   --color: white;
 }
 
-.btn-success {
+.btn-success.btn-fill-solid {
   --background: var(--app-success);
   --color: white;
 }
 
-.btn-danger {
+.btn-danger.btn-fill-solid {
   --background: var(--app-danger);
   --color: white;
 }
 
-.btn-warning {
+.btn-warning.btn-fill-solid {
   --background: var(--app-warning);
   --color: white;
 }
 
-.btn-gradient {
-  --background: linear-gradient(45deg, var(--app-primary) 0%, var(--app-primary-light) 100%);
+.btn-gradient.btn-fill-solid {
+  --background: linear-gradient(45deg, var(--app-primary), var(--app-primary-light));
   --color: white;
-  --box-shadow: 0 4px 15px rgba(var(--app-primary-rgb), 0.4);
 }
 
+/* OUTLINE VARIANTS */
+.btn-primary.btn-fill-outline {
+  --border-color: var(--app-primary);
+  --color: var(--app-primary);
+}
+
+.btn-secondary.btn-fill-outline {
+  --border-color: var(--app-secondary);
+  --color: var(--app-secondary);
+}
+
+.btn-danger.btn-fill-outline {
+  --border-color: var(--app-danger);
+  --color: var(--app-danger);
+}
+
+.btn-warning.btn-fill-outline {
+  --border-color: var(--app-warning);
+  --color: var(--app-warning);
+}
+
+.btn-primary.btn-fill-clear {
+  --color: var(--app-primary);
+}
+
+/* CLEAR (text-only) */
 ion-button[disabled] {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* SIZE SYSTEM */
+.btn-size-sm {
+  --padding-top: 6px !important;
+  --padding-bottom: 6px !important;
+  font-size: 14px;
+}
+
+.btn-size-md {
+  font-size: 16px;
+}
+
+.btn-size-lg {
+  --padding-top: 14px !important;
+  --padding-bottom: 14px !important;
+  font-size: 18px;
+}
+
 
 ion-spinner {
   position: absolute;

@@ -24,6 +24,7 @@ import {
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { addIcons } from 'ionicons';
 import { createOutline, saveOutline, closeOutline } from 'ionicons/icons';
+import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
 
 interface IUserProfile {
   name: string;
@@ -41,7 +42,6 @@ interface IUserProfile {
     IonContent,
     CommonModule,
     ReactiveFormsModule,
-    AppHeaderComponent,
     IonCard,
     IonCardHeader,
     IonCardTitle,
@@ -51,9 +51,9 @@ interface IUserProfile {
     IonInput,
     IonSelect,
     IonSelectOption,
-    IonButton,
-    IonIcon,
     IonItem,
+    AppHeaderComponent,
+    ThemeButtonComponent
   ]
 })
 export class ProfilePage implements OnInit {

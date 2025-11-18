@@ -11,6 +11,7 @@ import {
 } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { CameraService } from 'src/app/services/camera.service';
+import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
 
 @Component({
   selector: 'app-gallery',
@@ -19,14 +20,14 @@ import { CameraService } from 'src/app/services/camera.service';
   standalone: true,
   imports: [
     IonContent,
-    IonButton,
     CommonModule,
     FormsModule,
     IonGrid,
     IonRow,
     IonCol,
     IonImg,
-    AppHeaderComponent
+    AppHeaderComponent,
+    ThemeButtonComponent
   ]
 })
 export class GalleryPage implements OnInit {

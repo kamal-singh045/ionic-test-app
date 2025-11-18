@@ -1,9 +1,14 @@
 <app-app-header title="Gallery"></app-app-header>
 
 <ion-content class="ion-padding">
-  <ion-button expand="block" (click)="takePhoto()">
-    Add Photo
-  </ion-button>
+  <app-theme-button
+    [title]="'Add Photo'"
+    [variant]="'primary'"
+    [fill]="'solid'"
+    [size]="'sm'"
+    (handler)="takePhoto()"
+  >
+  </app-theme-button>
 
   <ion-grid>
     <ion-row>

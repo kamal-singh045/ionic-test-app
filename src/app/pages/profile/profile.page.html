@@ -78,31 +78,33 @@
         <!-- Action Buttons -->
         <div class="button-container">
            @if (!isEditing) {
-              <ion-button expand="block" (click)="enableEdit()">
-                <ion-icon name="create-outline" slot="start"></ion-icon>
-                Edit Profile
-              </ion-button>
+              <app-theme-button
+                [title]="'Edit'"
+                [variant]="'primary'"
+                [fill]="'solid'"
+                [size]="'md'"
+                [iconStart]="'create-outline'"
+                (handler)="enableEdit()"
+              ></app-theme-button>
            } @else {
               <div class="edit-buttons">
-                <ion-button
-                  expand="block"
-                  (click)="saveProfile()"
-                  color="success"
+                <app-theme-button
+                  [title]="'Save'"
+                  [variant]="'success'"
+                  [iconStart]="'save-outline'"
+                  (handler)="saveProfile()"
                   [disabled]="!profileForm.valid"
-                >
-                  <ion-icon name="save-outline" slot="start"></ion-icon>
-                  Save
-                </ion-button>
-                <ion-button
-                  expand="block"
-                  (click)="cancelEdit()"
-                  color="medium"
-                >
-                  <ion-icon name="close-outline" slot="start"></ion-icon>
-                  Cancel
-                </ion-button>
+                ></app-theme-button>
+
+                <app-theme-button
+                  [title]="'Cancel'"
+                  [variant]="'transparent'"
+                  [fill]="'outline'"
+                  iconStart="close-outline"
+                  (handler)="cancelEdit()"
+                ></app-theme-button>
               </div>
-           }
+            }
         </div>
       </form>
     </ion-card-content>
