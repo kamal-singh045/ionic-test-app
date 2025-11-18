@@ -10,52 +10,34 @@
       <form [formGroup]="profileForm">
         <ion-list>
           <!-- Name Field -->
-          <ion-item>
-            <ion-label position="stacked">Name</ion-label>
-            <ion-input
-              formControlName="name"
-              type="text"
-              placeholder="Enter your name"
-            ></ion-input>
-          </ion-item>
-          @if (hasError('name', 'required')) {
-            <div class="error-message">Name is required</div>
-          }
-          @if (hasError('name', 'minlength')) {
-            <div class="error-message">Name should be at least 3 characters</div>
-          }
+          <app-theme-input
+            label="Name"
+            type="text"
+            placeholder="Enter name"
+            formControlName="name"
+            [showError]="profileForm.controls['name'].dirty && profileForm.controls['name'].invalid"
+            [error]="getError('name')"
+          ></app-theme-input>
 
           <!-- Email Field -->
-          <ion-item>
-            <ion-label position="stacked">Email</ion-label>
-            <ion-input
-              formControlName="email"
-              type="email"
-              placeholder="Enter your email"
-            ></ion-input>
-          </ion-item>
-          @if (hasError('email', 'required')) {
-            <div class="error-message">Email is required</div>
-          }
-          @if (hasError('email', 'email')) {
-            <div class="error-message">Invalid email format</div>
-          }
+          <app-theme-input
+            label="Email"
+            type="email"
+            placeholder="Enter email"
+            formControlName="email"
+            [showError]="profileForm.controls['email'].dirty && profileForm.controls['email'].invalid"
+            [error]="getError('email')"
+          ></app-theme-input>
           
           <!-- Phone Field -->
-          <ion-item>
-            <ion-label position="stacked">Phone</ion-label>
-            <ion-input
-              formControlName="phone"
-              type="tel"
-              placeholder="Enter your phone number"
-            ></ion-input>
-          </ion-item>
-          @if(hasError('phone', 'required')) {
-            <div class="error-message">Phone number is required</div>
-          }
-          @if(hasError('phone', 'pattern')) {
-            <div class="error-message">Invalid phone number format</div>
-          }
+          <app-theme-input
+            label="Phone"
+            type="tel"
+            placeholder="Enter phone number"
+            formControlName="phone"
+            [showError]="profileForm.controls['phone'].dirty && profileForm.controls['phone'].invalid"
+            [error]="getError('phone')"
+          ></app-theme-input>
 
           <!-- Designation Dropdown -->
           <ion-item>

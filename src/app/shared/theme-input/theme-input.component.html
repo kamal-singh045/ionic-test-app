@@ -1,0 +1,28 @@
+<div class="input-wrapper">
+
+  <label class="label">{{ label }}</label>
+
+  <div class="input-container">
+    @if (iconStart) {
+      <ion-icon [name]="iconStart" class="icon-left"></ion-icon>
+    }
+
+    <ion-input
+      [type]="type"
+      [value]="value"
+      [placeholder]="placeholder"
+      [disabled]="disabled"
+      (ionInput)="updateValue($event)"
+      (ionBlur)="onTouched()"
+    ></ion-input>
+
+    @if (iconEnd) {
+      <ion-icon [name]="iconEnd" class="icon-right"></ion-icon>
+    }
+  </div>
+
+  @if (showError && error) {
+    <p class="error">{{ error }}</p>
+  }
+
+</div>

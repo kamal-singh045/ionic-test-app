@@ -17,14 +17,13 @@ import {
   IonInput,
   IonSelect,
   IonSelectOption,
-  IonButton,
-  IonIcon,
   IonItem
 } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { addIcons } from 'ionicons';
 import { createOutline, saveOutline, closeOutline } from 'ionicons/icons';
 import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
+import { ThemeInputComponent } from 'src/app/shared/theme-input/theme-input.component';
 
 interface IUserProfile {
   name: string;
@@ -48,12 +47,12 @@ interface IUserProfile {
     IonCardContent,
     IonList,
     IonLabel,
-    IonInput,
     IonSelect,
     IonSelectOption,
     IonItem,
     AppHeaderComponent,
-    ThemeButtonComponent
+    ThemeButtonComponent,
+    ThemeInputComponent
   ]
 })
 export class ProfilePage implements OnInit {
@@ -135,5 +134,35 @@ export class ProfilePage implements OnInit {
   hasError(fieldName: string, errorType: string): boolean {
     const field = this.profileForm.get(fieldName);
     return !!(field && field.hasError(errorType) && (field.dirty || field.touched));
+  }
+
+  allErrors: Record<string, any> = {
+    name: {
+      required: 'Name is required',
+      minlength: 'Name should be at least 3 characters'
+    },
+    email: {
+      required: 'Email is required',
+      email: 'Invalid email'
+    },
+    phone: {
+      required: 'Phone number is required',
+      pattern: 'Invalid phone number format'
+    },
+    designation: {
+      required: 'Designation is required'
+    }
+  };
+
+  getError(fieldName: string): string {
+    const field = this.profileForm.get(fieldName);
+    if (!field) return '';
+    const errors = this.allErrors[fieldName];
+    for (const errorType in errors) {
+      if (field.hasError(errorType)) {
+        return errors[errorType];
+      }
+    }
+    return '';
   }
 }

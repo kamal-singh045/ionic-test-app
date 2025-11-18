@@ -17,6 +17,9 @@ ion-card-title {
 ion-list {
   background: transparent;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 ion-item {
@@ -32,7 +35,6 @@ ion-item {
   }
 }
 
-ion-input,
 ion-select {
   --padding-start: var(--app-spacing-sm);
   --padding-end: var(--app-spacing-sm);
