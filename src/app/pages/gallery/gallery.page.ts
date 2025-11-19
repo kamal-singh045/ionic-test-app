@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -12,6 +12,8 @@ import {
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
+import { IUserProfile, UserService } from 'src/app/services/user.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-gallery',
@@ -30,15 +32,25 @@ import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.c
     ThemeButtonComponent
   ]
 })
-export class GalleryPage implements OnInit {
-
+export class GalleryPage implements OnInit, OnDestroy {
+  userData: IUserProfile | null = null;
+  apiCallCount: number = 0;
   photos: string[] = [];
+  private destroy$ = new Subject<void>();
 
   constructor(
-    private cameraService: CameraService
+    private cameraService: CameraService,
+    private userService: UserService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.fetchUserProfile();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   async takePhoto() {
     const photo = await this.cameraService.takeOrPickPhoto();
@@ -53,5 +65,19 @@ export class GalleryPage implements OnInit {
       //   filename: `photo_${Date.now()}.${photo?.format}`
       // })
     }
+  }
+
+  fetchUserProfile() {
+    this.userService.fetchUserProfile()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.apiCallCount = this.userService.getApiCallCount();
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      })
   }
 }

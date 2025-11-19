@@ -4,6 +4,9 @@
   <div id="container">
     <strong>Ready to create an app?</strong>
 
+    <p>{{userData?.name}}, {{userData?.email}}</p>
+    <p>API Call Count: {{apiCallCount}}</p>
+
     <p>{{isLocationFetching ? 'Fetching Location' : 'Location Fetched'}}</p>
 
     <p>Notification Permission: {{isNotificationPermissionGranted}}</p>

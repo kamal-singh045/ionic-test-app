@@ -14,7 +14,6 @@ import {
   IonCardContent,
   IonList,
   IonLabel,
-  IonInput,
   IonSelect,
   IonSelectOption,
   IonItem

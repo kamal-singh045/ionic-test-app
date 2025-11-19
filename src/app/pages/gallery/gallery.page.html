@@ -10,6 +10,9 @@
   >
   </app-theme-button>
 
+  <p>{{userData?.name}}, {{userData?.email}}</p>
+  <p>API Call Count: {{apiCallCount}}</p>
+
   <ion-grid>
     <ion-row>
       @for (photo of photos; track photo) {

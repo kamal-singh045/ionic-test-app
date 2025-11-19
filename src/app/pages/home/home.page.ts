@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   IonContent,
   IonButton
@@ -8,6 +8,8 @@ import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.compone
 import { GeolocationService } from 'src/app/services/geolocation.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { Position } from '@capacitor/geolocation';
+import { IUserProfile, UserService } from 'src/app/services/user.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -22,20 +24,46 @@ import { Position } from '@capacitor/geolocation';
     AppHeaderComponent
   ],
 })
-export class HomePage {
+export class HomePage implements OnInit, OnDestroy {
   isLocationFetching: boolean = true;
   locationPosition: Position | null = null;
   isNotificationPermissionGranted = false;
+  userData: IUserProfile | null = null;
+  apiCallCount: number = 0;
+
+  private destroy$ = new Subject<void>();
   constructor(
     private geolocationService: GeolocationService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private userService: UserService
   ) { }
 
   async ngOnInit() {
+    this.fetchUserProfile();
+
     const position = await this.geolocationService.getCurrentLocation();
     this.locationPosition = position;
     this.isLocationFetching = false;
     const notification = await this.notificationService.requestNotificationPermission();
     this.isNotificationPermissionGranted = notification;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  fetchUserProfile() {
+    this.userService.fetchUserProfile()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.apiCallCount = this.userService.getApiCallCount();
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      })
   }
 }
