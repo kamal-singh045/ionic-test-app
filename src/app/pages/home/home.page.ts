@@ -10,6 +10,14 @@ import { NotificationService } from 'src/app/services/notification.service';
 import { Position } from '@capacitor/geolocation';
 import { IUserProfile, UserService } from 'src/app/services/user.service';
 import { Subject, takeUntil } from 'rxjs';
+import { tasksList } from 'src/app/helper/dummy-data';
+import { IonList, IonItem, IonInfiniteScroll, IonInfiniteScrollContent } from '@ionic/angular/standalone';
+
+interface ITask {
+  id: number;
+  title: string;
+  description: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -20,8 +28,11 @@ import { Subject, takeUntil } from 'rxjs';
     IonContent,
     IonButton,
     RouterLink,
-
-    AppHeaderComponent
+    IonList,
+    IonItem,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    AppHeaderComponent,
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -30,13 +41,16 @@ export class HomePage implements OnInit, OnDestroy {
   isNotificationPermissionGranted = false;
   userData: IUserProfile | null = null;
   apiCallCount: number = 0;
+  tasksList: ITask[] = [];
 
   private destroy$ = new Subject<void>();
   constructor(
     private geolocationService: GeolocationService,
     private notificationService: NotificationService,
     private userService: UserService
-  ) { }
+  ) {
+    this.tasksList = tasksList;
+  }
 
   async ngOnInit() {
     this.fetchUserProfile();

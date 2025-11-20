@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import {
@@ -5,10 +6,11 @@ import {
   IonToolbar,
   IonTitle,
   IonButtons,
-  IonMenuButton,
+  IonButton,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { menuOutline } from 'ionicons/icons';
+import { menuOutline, arrowBack } from 'ionicons/icons';
 
 @Component({
   selector: 'app-app-header',
@@ -19,17 +21,22 @@ import { menuOutline } from 'ionicons/icons';
     IonHeader,
     IonToolbar,
     IonTitle,
-    // IonButtons,
-    // IonMenuButton
+    IonButtons,
+    IonButton,
+    IonIcon,
   ]
 })
 export class AppHeaderComponent implements OnInit {
   @Input() title: string = '';
+  @Input() showBackButton?: boolean = false;
+
   constructor(
-    private menuController: MenuController
+    private menuController: MenuController,
+    private location: Location
   ) {
     addIcons({
-      'menu-outline': menuOutline
+      'menu-outline': menuOutline,
+      'arrow-back': arrowBack
     })
   }
 
@@ -37,5 +44,9 @@ export class AppHeaderComponent implements OnInit {
 
   openMenu() {
     this.menuController.open('main-menu');
+  }
+
+  goBack() {
+    this.location.back();
   }
 }

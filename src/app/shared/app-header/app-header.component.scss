@@ -1,12 +1,15 @@
 ion-header {
   ion-toolbar {
     --background: var(--app-primary);
-    ion-menu-button {
-      --color: white;
-    }
     
     ion-title {
       --color: white;
+    }
+
+    ion-buttons {
+      ion-button {
+        --color: white;
+      }
     }
   }
 }

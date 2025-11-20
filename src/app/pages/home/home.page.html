@@ -1,8 +1,8 @@
 <app-app-header title="Home"></app-app-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
   <div id="container">
-    <strong>Ready to create an app?</strong>
+    <p class="text-xl font-semibold">Ready to create an app?</p>
 
     <p>{{userData?.name}}, {{userData?.email}}</p>
     <p>API Call Count: {{apiCallCount}}</p>
@@ -17,4 +17,22 @@
       Go to gallery
     </ion-button>
   </div>
+  <ion-list>
+    @for (item of tasksList; track $index) {
+      <ion-item
+        [routerLink]="['/tabs/home', item.id]"
+        button
+      >
+        <div class="flex flex-col gap-2 bg-gray-200 w-full p-4 rounded-md">
+          <p class="text-lg font-semibold">{{item.title}}</p>
+          <p>{{item.description}}</p>
+        </div>
+      </ion-item>
+    }
+  </ion-list>
+  <ion-infinite-scroll>
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- <router-outlet></router-outlet> -->
 </ion-content>

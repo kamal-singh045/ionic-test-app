@@ -1,6 +1,5 @@
 #container {
   display: flex;
-  height: 100%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -17,4 +16,18 @@
 #container strong {
   font-size: 20px;
   line-height: 26px;
+}
+
+ion-list {
+  background: transparent;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+    ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    --inner-border-width: 0;
+  }
 }
