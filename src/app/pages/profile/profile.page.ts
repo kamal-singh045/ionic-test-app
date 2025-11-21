@@ -23,13 +23,7 @@ import { addIcons } from 'ionicons';
 import { createOutline, saveOutline, closeOutline } from 'ionicons/icons';
 import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
 import { ThemeInputComponent } from 'src/app/shared/theme-input/theme-input.component';
-
-interface IUserProfile {
-  name: string;
-  email: string;
-  phone: string;
-  designation: string;
-}
+import { IUser, UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-profile',
@@ -57,23 +51,16 @@ interface IUserProfile {
 export class ProfilePage implements OnInit {
   profileForm!: FormGroup;
   isEditing = false;
-  designations = [
-    'Software Developer',
-    'Senior Developer',
-    'Team Lead',
-    'Project Manager',
-    'Product Manager',
-    'UI/UX Designer',
-    'QA Engineer'
+  genders = [
+    'male',
+    'female'
   ];
-  userData: IUserProfile = {
-    name: 'Kamal Singh',
-    email: 'kamal@example.com',
-    phone: '8888888888',
-    designation: 'Software Developer'
-  };
+  userData: IUser | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private userService: UserService
+  ) {
     addIcons({
       'create-outline': createOutline,
       'save-outline': saveOutline,
@@ -82,28 +69,42 @@ export class ProfilePage implements OnInit {
   }
 
   ngOnInit() {
+    this.fetchUserData();
     this.initializeForm();
   }
 
   initializeForm() {
     this.profileForm = this.fb.group({
-      name: [
-        { value: this.userData.name, disabled: true },
-        [Validators.required, Validators.minLength(3)]
-      ],
       email: [
-        { value: this.userData.email, disabled: true },
+        { value: this.userData?.email, disabled: true },
         [Validators.required, Validators.email]
       ],
-      phone: [
-        { value: this.userData.phone, disabled: true },
-        [Validators.required, Validators.pattern(/^\d{10}$/)]
+      firstName: [
+        { value: this.userData?.firstName, disabled: true },
+        [Validators.required, Validators.minLength(3)]
       ],
-      designation: [
-        { value: this.userData.designation, disabled: true },
+      lastName: [
+        { value: this.userData?.lastName, disabled: true },
+        [Validators.required]
+      ],
+      username: [
+        { value: this.userData?.username, disabled: true },
+        [Validators.required]
+      ],
+      gender: [
+        { value: this.userData?.gender, disabled: true },
         [Validators.required]
       ]
     })
+  }
+
+  fetchUserData() {
+    this.userService.getCurrentUser().subscribe({
+      next: (user) => {
+        this.userData = user;
+        this.profileForm.patchValue(user);
+      }
+    });
   }
 
   enableEdit() {
@@ -112,6 +113,9 @@ export class ProfilePage implements OnInit {
   }
 
   cancelEdit() {
+    if (!this.userData) {
+      return;
+    }
     this.isEditing = false;
     this.profileForm.disable();
     // Reset to the original values
@@ -121,8 +125,6 @@ export class ProfilePage implements OnInit {
   saveProfile() {
     if (this.profileForm.valid) {
       const updatedData = this.profileForm.getRawValue();
-      console.log('Saving updated values: ', updatedData);
-
       this.userData = updatedData;
       // Disable editing mode
       this.isEditing = false;

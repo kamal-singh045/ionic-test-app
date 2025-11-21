@@ -9,16 +9,6 @@
     <ion-card-content>
       <form [formGroup]="profileForm">
         <ion-list>
-          <!-- Name Field -->
-          <app-theme-input
-            label="Name"
-            type="text"
-            placeholder="Enter name"
-            formControlName="name"
-            [showError]="profileForm.controls['name'].dirty && profileForm.controls['name'].invalid"
-            [error]="getError('name')"
-          ></app-theme-input>
-
           <!-- Email Field -->
           <app-theme-input
             label="Email"
@@ -28,31 +18,51 @@
             [showError]="profileForm.controls['email'].dirty && profileForm.controls['email'].invalid"
             [error]="getError('email')"
           ></app-theme-input>
-          
-          <!-- Phone Field -->
+
+          <!-- username Field -->
           <app-theme-input
-            label="Phone"
-            type="tel"
-            placeholder="Enter phone number"
-            formControlName="phone"
-            [showError]="profileForm.controls['phone'].dirty && profileForm.controls['phone'].invalid"
-            [error]="getError('phone')"
+            label="Username"
+            type="string"
+            placeholder="Enter username"
+            formControlName="username"
+            [showError]="profileForm.controls['username'].dirty && profileForm.controls['username'].invalid"
+            [error]="getError('username')"
+          ></app-theme-input>
+
+          <!-- First Name Field -->
+          <app-theme-input
+            label="First Name"
+            type="text"
+            placeholder="Enter first name"
+            formControlName="firstName"
+            [showError]="profileForm.controls['firstName'].dirty && profileForm.controls['firstName'].invalid"
+            [error]="getError('firstName')"
+          ></app-theme-input>
+          
+          <!-- Last Name Field -->
+          <app-theme-input
+            label="Last Name"
+            type="string"
+            placeholder="Enter last number"
+            formControlName="lastName"
+            [showError]="profileForm.controls['lastName'].dirty && profileForm.controls['lastName'].invalid"
+            [error]="getError('lastName')"
           ></app-theme-input>
 
           <!-- Designation Dropdown -->
           <ion-item>
-            <ion-label position="stacked">Designation</ion-label>
+            <ion-label position="stacked">Gender</ion-label>
             <ion-select
-              formControlName="designation"
-              placeholder="Select your designation"
+              formControlName="gender"
+              placeholder="Select your gender"
               interface="popover"
               >
-              @for (designation of designations; track designation) {
-                <ion-select-option [value]="designation">{{designation}}</ion-select-option>
+              @for (gender of genders; track gender) {
+                <ion-select-option [value]="gender">{{gender.toUpperCase()}}</ion-select-option>
               }
             </ion-select>
           </ion-item>
-          @if (hasError('designation', 'required')) {
+          @if (hasError('gender', 'required')) {
             <div class="error-message">Designation is required</div>
           }
         </ion-list>

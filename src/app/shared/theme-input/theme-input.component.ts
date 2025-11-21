@@ -61,5 +61,6 @@ export class ThemeInputComponent implements ControlValueAccessor {
     const val = ev.target?.value;
     this.value = val;
     this.onChange(val);
+    this.onTouched();
   }
 }

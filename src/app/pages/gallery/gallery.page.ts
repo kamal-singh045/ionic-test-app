@@ -12,8 +12,8 @@ import {
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
-import { IUserProfile, UserService } from 'src/app/services/user.service';
-import { Subject, takeUntil } from 'rxjs';
+import { IUser, UserService } from 'src/app/services/user.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-gallery',
@@ -33,7 +33,7 @@ import { Subject, takeUntil } from 'rxjs';
   ]
 })
 export class GalleryPage implements OnInit, OnDestroy {
-  userData: IUserProfile | null = null;
+  userData: IUser | null = null;
   apiCallCount: number = 0;
   photos: string[] = [];
   private destroy$ = new Subject<void>();
@@ -44,7 +44,7 @@ export class GalleryPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.fetchUserProfile();
+    // this.fetchUserProfile();
   }
 
   ngOnDestroy(): void {
@@ -67,17 +67,17 @@ export class GalleryPage implements OnInit, OnDestroy {
     }
   }
 
-  fetchUserProfile() {
-    this.userService.fetchUserProfile()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (data) => {
-          this.userData = data;
-          this.apiCallCount = this.userService.getApiCallCount();
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      })
-  }
+  // fetchUserProfile() {
+  //   this.userService.fetchUserProfile()
+  //     .pipe(takeUntil(this.destroy$))
+  //     .subscribe({
+  //       next: (data) => {
+  //         this.userData = data;
+  //         this.apiCallCount = this.userService.getApiCallCount();
+  //       },
+  //       error: (error) => {
+  //         console.error(error);
+  //       }
+  //     })
+  // }
 }
