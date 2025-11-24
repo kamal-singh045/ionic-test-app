@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
-import { tap, shareReplay, delay, catchError, filter, take, map } from 'rxjs/operators';
+import { tap, shareReplay, catchError, filter, take, map } from 'rxjs/operators';
 
 export interface IUser {
   id: number;
@@ -85,7 +85,7 @@ export class UserService {
     );
   }
 
-  public getCurrentUser() {
+  public getCurrentUser(): Observable<IUser> {
     const apiUrl = 'https://dummyjson.com/auth/me';
     return this.http.get<IUser>(apiUrl).pipe(
       tap((user) => {
