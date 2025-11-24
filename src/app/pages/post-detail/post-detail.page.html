@@ -20,15 +20,25 @@
         <!-- Post Header -->
         <div class="post-header">
           <h1 class="text-xl font-semibold">{{ postDetail.title }}</h1>
-          <div>
-            <ion-chip color="primary" outline="true">
-              <ion-icon name="person-circle-outline"></ion-icon>
-              <ion-label>User ID: {{ postDetail.userId }}</ion-label>
-            </ion-chip>
-            <ion-chip color="medium" outline="true">
-              <ion-icon name="document-outline"></ion-icon>
-              <ion-label>Post #{{ postDetail.id }}</ion-label>
-            </ion-chip>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <ion-chip color="primary" outline="true">
+                <ion-icon name="person-circle-outline"></ion-icon>
+                <ion-label>User ID: {{ postDetail.userId }}</ion-label>
+              </ion-chip>
+              <ion-chip color="medium" outline="true">
+                <ion-icon name="document-outline"></ion-icon>
+                <ion-label>Post #{{ postDetail.id }}</ion-label>
+              </ion-chip>
+            </div>
+            <div class="flex items-center">
+              <ion-button class="edit-delete-button" fill="clear" color="medium">
+                <ion-icon name="pencil-sharp"></ion-icon>
+              </ion-button>
+              <ion-button class="edit-delete-button" fill="clear" color="danger">
+                <ion-icon name="trash-bin-sharp"></ion-icon>
+              </ion-button>
+            </div>
           </div>
         </div>
 
@@ -79,14 +89,105 @@
             <ion-icon name="share-social-outline"></ion-icon>
           </ion-button>
         </div>
+
+        <!-- Comments Section -->
+        <div class="mt-6">
+          <div class="mb-5">
+            <h2 class="flex items-center gap-2 text-xl font-bold text-gray-900">
+              <ion-icon name="chatbubble-outline" class="text-2xl"></ion-icon>
+              Comments ({{ totalComments }})
+            </h2>
+          </div>
+
+          <!-- Add Comment Form -->
+          <div class="add-comment-form">
+            <ion-avatar class="comment-avatar">
+              <ion-icon name="person-circle-outline"></ion-icon>
+            </ion-avatar>
+            <div class="flex-1 flex gap-2 items-end">
+              <ion-textarea
+                [(ngModel)]="newComment"
+                placeholder="Write a comment..."
+                rows="2"
+                auto-grow="true"
+                class="comment-input"
+              ></ion-textarea>
+              <ion-button
+                (click)="submitComment()"
+                [disabled]="!newComment.trim()"
+                size="small"
+                class="send-btn"
+              >
+                <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+
+          <!-- Comments List -->
+          <div class="flex flex-col gap-4">
+            @if (isCommentsLoading && comments.length === 0) {
+              <!-- Loading Comments Skeleton -->
+              @for (i of [1,2,3]; track i) {
+                <div class="flex gap-3 p-4 bg-white rounded-xl border border-gray-200">
+                  <ion-skeleton-text animated style="width: 40px; height: 40px; border-radius: 50%;"></ion-skeleton-text>
+                  <div class="flex-1">
+                    <ion-skeleton-text animated style="width: 30%; height: 16px; margin-bottom: 8px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 100%; height: 14px; margin-bottom: 4px;"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="width: 80%; height: 14px;"></ion-skeleton-text>
+                  </div>
+                </div>
+              }
+            } @else if (comments.length > 0) {
+              @for (comment of comments; track comment.id) {
+                <div class="flex gap-3 p-4 bg-white rounded-xl border border-gray-200 hover:shadow-md transition-shadow">
+                  <ion-avatar class="comment-avatar">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                  </ion-avatar>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-2 flex-wrap">
+                      <span class="text-sm font-semibold text-gray-900">{{ comment.user.fullName }}</span>
+                      <span class="text-xs text-gray-500">@{{ comment.user.username }}</span>
+                    </div>
+                    <p class="text-sm leading-relaxed text-gray-800 mb-3 break-words">{{ comment.body }}</p>
+                    <div class="flex gap-4">
+                      <button class="comment-action">
+                        <ion-icon name="thumbs-up-outline"></ion-icon>
+                        <span>{{ comment.likes }}</span>
+                      </button>
+                      <button class="comment-action">
+                        <ion-icon name="chatbubble-outline"></ion-icon>
+                        Reply
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              <!-- Infinite Scroll -->
+              @if (hasMoreComments) {
+                <ion-infinite-scroll (ionInfinite)="loadMoreComments($event)">
+                  <ion-infinite-scroll-content
+                    loadingSpinner="bubbles"
+                    loadingText="Loading more comments..."
+                  ></ion-infinite-scroll-content>
+                </ion-infinite-scroll>
+              }
+            } @else {
+              <div class="flex flex-col items-center justify-center text-center py-12 px-6 bg-gray-50 rounded-xl">
+                <ion-icon name="chatbubble-outline" class="text-6xl text-gray-400 mb-4"></ion-icon>
+                <p class="text-sm text-gray-500">No comments yet. Be the first to comment!</p>
+              </div>
+            }
+          </div>
+        </div>
       </div>
     } @else {
       <!-- Error State -->
-      <div class="error-state">
-        <ion-icon name="alert-circle-outline" color="danger"></ion-icon>
-        <h2>Post Not Found</h2>
-        <p>The post you're looking for doesn't exist or has been removed.</p>
-        <ion-button routerLink="/tabs/home" color="primary">
+      <div class="flex flex-col items-center justify-center text-center py-12 px-6 min-h-[60vh]">
+        <ion-icon name="alert-circle-outline" color="danger" class="text-8xl mb-6"></ion-icon>
+        <h2 class="text-2xl font-bold text-gray-900 mb-3">Post Not Found</h2>
+        <p class="text-base text-gray-500 mb-6 max-w-md">The post you're looking for doesn't exist or has been removed.</p>
+        <ion-button routerLink="/tabs/home" color="primary" class="error-btn">
           Back to Home
         </ion-button>
       </div>

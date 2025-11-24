@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, catchError, Observable, tap, throwError } from "rxjs";
-import { IPost, IPostsListPayload, IPostsListResponse } from "./types";
+import { IPost, IPostCommentPayload, IPostCommentsResponse, IPostsListPayload, IPostsListResponse } from "./types";
 
 const postsListInitialState: IPostsListResponse = {
   posts: [],
@@ -84,6 +84,24 @@ export class PostService {
       }),
       catchError((error) => {
         console.error('❌ Failed to fetch post:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Fetch comments by post id
+   */
+  public fetchCommentsByPostId(payload: IPostCommentPayload): Observable<IPostCommentsResponse> {
+    let apiUrl = `https://dummyjson.com/posts/${payload.postId}/comments`;
+    apiUrl += `?limit=${payload.limit}`;
+    apiUrl += payload.skip ? `&skip=${payload.skip}` : '';
+    return this.http.get<IPostCommentsResponse>(apiUrl).pipe(
+      tap((response) => {
+        console.log('📝 Fetched comments:', response);
+      }),
+      catchError((error) => {
+        console.error('❌ Failed to fetch comments:', error);
         return throwError(() => error);
       })
     );

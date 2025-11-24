@@ -7,11 +7,15 @@ import {
   IonSkeletonText,
   IonChip,
   IonIcon,
-  IonLabel
+  IonLabel,
+  IonAvatar,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+  IonTextarea
 } from '@ionic/angular/standalone';
 import { ActivatedRoute } from '@angular/router';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
-import { IPost } from 'src/app/services/post/types';
+import { IPost, IPostComment } from 'src/app/services/post/types';
 import { PostService } from 'src/app/services/post/post.service';
 import { addIcons } from 'ionicons';
 import {
@@ -20,7 +24,14 @@ import {
   shareSocialOutline,
   chatbubbleOutline,
   heartSharp,
-  eyeOutline
+  eyeOutline,
+  personCircleOutline,
+  documentOutline,
+  pricetagsOutline,
+  thumbsUpOutline,
+  sendOutline,
+  pencilSharp,
+  trashBinSharp
 } from 'ionicons/icons';
 
 @Component({
@@ -37,13 +48,26 @@ import {
     IonIcon,
     IonLabel,
     IonButton,
+    IonAvatar,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+    IonTextarea,
     AppHeaderComponent
   ]
 })
 export class PostDetailPage implements OnInit {
   id!: number;
   postDetail: IPost | null = null;
-  isPostLoading = true;
+  isPostLoading = false;
+
+  // comments
+  comments: IPostComment[] = [];
+  isCommentsLoading = false;
+  totalComments = 0;
+  skipComments = 0;
+  limitComments = 10;
+  hasMoreComments = true;
+  newComment = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -58,15 +82,27 @@ export class PostDetailPage implements OnInit {
       shareSocialOutline,
       chatbubbleOutline,
       heartSharp,
-      eyeOutline
+      eyeOutline,
+      personCircleOutline,
+      documentOutline,
+      pricetagsOutline,
+      thumbsUpOutline,
+      sendOutline,
+      pencilSharp,
+      trashBinSharp
     })
   }
 
   ngOnInit() {
     this.fetchPostDetail();
+    this.fetchComments();
   }
 
+  /**
+   * Fetch post detail
+   */
   fetchPostDetail() {
+    if (this.isPostLoading) return;
     this.isPostLoading = true;
     this.postsService.fetchPostById(this.id).subscribe({
       next: (response) => {
@@ -78,5 +114,81 @@ export class PostDetailPage implements OnInit {
         this.isPostLoading = false;
       }
     })
+  }
+
+  /**
+   * Fetch comments
+   */
+  fetchComments(isRefresh = false) {
+    if (this.isCommentsLoading) return;
+
+    if (isRefresh) {
+      this.skipComments = 0;
+      this.comments = [];
+    }
+
+    this.isCommentsLoading = true;
+    const skip = this.skipComments * this.limitComments;
+
+    this.postsService.fetchCommentsByPostId({
+      postId: this.id,
+      limit: this.limitComments,
+      skip: skip
+    }).subscribe({
+      next: (response) => {
+        if (isRefresh) {
+          this.comments = response.comments;
+        } else {
+          this.comments = [...this.comments, ...response.comments];
+        }
+        this.totalComments = response.total;
+        this.hasMoreComments = this.comments.length < response.total;
+        this.skipComments++;
+        this.isCommentsLoading = false;
+      },
+      error: (error) => {
+        console.error('❌ Failed to fetch comments:', error);
+        this.isCommentsLoading = false;
+      }
+    })
+  }
+
+  /**
+   * Load more comments
+   */
+  loadMoreComments(event: any) {
+    if (!this.hasMoreComments) {
+      event.target.complete();
+      return;
+    }
+
+    this.fetchComments();
+    setTimeout(() => {
+      event.target.complete();
+    }, 500);
+  }
+
+  /**
+   * Submit new comment (mock)
+   */
+  submitComment() {
+    if (!this.newComment.trim()) return;
+
+    // Mock adding comment (since API doesn't support POST)
+    const mockComment: IPostComment = {
+      id: Date.now(),
+      body: this.newComment,
+      postId: this.id,
+      likes: 0,
+      user: {
+        id: 1,
+        username: 'currentuser',
+        fullName: 'Current User'
+      }
+    };
+
+    this.comments.unshift(mockComment);
+    this.totalComments++;
+    this.newComment = '';
   }
 }
