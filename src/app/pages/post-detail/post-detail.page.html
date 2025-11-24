@@ -1,5 +1,95 @@
 <app-app-header title="Post Detail" [showBackButton]="true"></app-app-header>
 
 <ion-content class="ion-padding">
-  <p>{{id}}</p>
+  <div class="post-detail-container">
+    @if (isPostLoading && !postDetail) {
+      <!-- Loading Skeleton -->
+      <div>
+        <div>
+          <ion-skeleton-text animated style="width: 60%; height: 24px; margin-bottom: 8px;"></ion-skeleton-text>
+          <ion-skeleton-text animated style="width: 40%; height: 16px;"></ion-skeleton-text>
+        </div>
+        <ion-skeleton-text animated style="width: 100%; height: 200px; border-radius: 12px; margin: 16px 0;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 100%; height: 16px; margin-bottom: 8px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 90%; height: 16px; margin-bottom: 8px;"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 95%; height: 16px;"></ion-skeleton-text>
+      </div>
+    } @else if (postDetail) {
+      <!-- Post Content -->
+      <div class="post-content">
+        <!-- Post Header -->
+        <div class="post-header">
+          <h1 class="text-xl font-semibold">{{ postDetail.title }}</h1>
+          <div>
+            <ion-chip color="primary" outline="true">
+              <ion-icon name="person-circle-outline"></ion-icon>
+              <ion-label>User ID: {{ postDetail.userId }}</ion-label>
+            </ion-chip>
+            <ion-chip color="medium" outline="true">
+              <ion-icon name="document-outline"></ion-icon>
+              <ion-label>Post #{{ postDetail.id }}</ion-label>
+            </ion-chip>
+          </div>
+        </div>
+
+        <!-- Post Body -->
+        <div class="mb-4 bg-gray-100 p-3 rounded-md">
+          <p class="text-gray-700">{{ postDetail.body }}</p>
+        </div>
+
+        <!-- Post Stats -->
+        <div class="flex items-center gap-4 mb-4">
+          <div class="flex gap-2 items-center">
+            <ion-icon name="heart-sharp" color="danger"></ion-icon>
+            <span class="text-lg font-semibold text-gray-800">{{ postDetail.reactions.likes}}</span>
+            <span class="text-sm text-gray-600">Likes</span>
+          </div>
+          <div class="flex gap-2 items-center">
+            <ion-icon name="heart-dislike-outline" color="medium"></ion-icon>
+            <span class="text-lg font-semibold text-gray-800">{{ postDetail.reactions.dislikes}}</span>
+            <span class="text-sm text-gray-600">Dislikes</span>
+          </div>
+          <div class="flex gap-2 items-center">
+            <ion-icon name="eye-outline" color="tertiary"></ion-icon>
+            <span class="text-lg font-semibold text-gray-800">{{ postDetail.views}}</span>
+            <span class="text-sm text-gray-600">Views</span>
+          </div>
+        </div>
+
+        <!-- Tags Section -->
+        @if (postDetail.tags && postDetail.tags.length > 0) {
+          <div class="mb-4">
+            @for (tag of postDetail.tags; track tag) {
+              <ion-chip color="secondary">
+                <ion-label>{{ tag }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        }
+
+        <!-- Action Buttons -->
+        <div class="mb-4 flex gap-2">
+          <ion-button color="primary">
+            <ion-icon name="heart-outline"></ion-icon>
+          </ion-button>
+          <ion-button fill="outline" color="primary">
+            <ion-icon name="chatbubble-outline"></ion-icon>
+          </ion-button>
+          <ion-button fill="outline" color="medium">
+            <ion-icon name="share-social-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    } @else {
+      <!-- Error State -->
+      <div class="error-state">
+        <ion-icon name="alert-circle-outline" color="danger"></ion-icon>
+        <h2>Post Not Found</h2>
+        <p>The post you're looking for doesn't exist or has been removed.</p>
+        <ion-button routerLink="/tabs/home" color="primary">
+          Back to Home
+        </ion-button>
+      </div>
+    }
+  </div>
 </ion-content>

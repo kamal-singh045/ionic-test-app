@@ -18,7 +18,8 @@ import {
   IonHeader,
   IonToolbar,
   IonList,
-  IonItem
+  IonItem,
+  IonSearchbar
 } from '@ionic/angular/standalone';
 import { Router, RouterLink } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
@@ -66,7 +67,8 @@ type TabType = 'all' | 'my';
     IonHeader,
     IonToolbar,
     IonList,
-    IonItem
+    IonItem,
+    IonSearchbar
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -197,7 +199,7 @@ export class HomePage implements OnInit, OnDestroy {
    * suggestion click
    */
   onSearchSuggestionClick(post: IPost) {
-    this.router.navigate(['/post', post.id]);
+    this.router.navigate(['/tabs/home', post.id]);
   }
 
   /**

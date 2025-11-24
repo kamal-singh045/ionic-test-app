@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, catchError, Observable, tap, throwError } from "rxjs";
-import { IPostsListPayload, IPostsListResponse } from "./types";
+import { IPost, IPostsListPayload, IPostsListResponse } from "./types";
 
 const postsListInitialState: IPostsListResponse = {
   posts: [],
@@ -68,6 +68,22 @@ export class PostService {
       }),
       catchError((error) => {
         console.error('❌ Failed to search posts:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Fetch post by id
+   */
+  public fetchPostById(id: number): Observable<IPost> {
+    let apiUrl = `https://dummyjson.com/posts/${id}`;
+    return this.http.get<IPost>(apiUrl).pipe(
+      tap((response) => {
+        console.log('📝 Fetched post:', response);
+      }),
+      catchError((error) => {
+        console.error('❌ Failed to fetch post:', error);
         return throwError(() => error);
       })
     );
