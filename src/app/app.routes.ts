@@ -58,7 +58,7 @@ export const tabsRoutes: Routes = [
       },
       {
         path: 'home/:id',
-        loadComponent: () => import('./pages/user-detail/user-detail.page').then(m => m.UserDetailPage)
+        loadComponent: () => import('./pages/post-detail/post-detail.page').then(m => m.PostDetailPage)
       },
       {
         path: 'gallery',

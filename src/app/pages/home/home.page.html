@@ -1,38 +1,158 @@
-<app-app-header title="Home"></app-app-header>
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-searchbar
+      [name]="'search'"
+      [(ngModel)]="searchTerm"
+      (ionInput)="onSearchChange($event)"
+      (ionClear)="onSearchClear()"
+      placeholder="Search posts..."
+      animated
+      show-clear-button="always"
+      class="custom-searchbar"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
 
-<ion-content class="ion-padding">
-  <div id="container">
-    <p class="text-xl font-semibold">Ready to create an app?</p>
-
-    <p>{{userData?.firstName}}, {{userData?.email}}</p>
-    <p>API Call Count: {{apiCallCount}}</p>
-
-    <p>{{isLocationFetching ? 'Fetching Location' : 'Location Fetched'}}</p>
-
-    <p>Notification Permission: {{isNotificationPermissionGranted}}</p>
-
-    <p>Location: {{locationPosition?.coords?.latitude}}, {{locationPosition?.coords?.longitude}} </p>
-
-    <ion-button class="gallery-redirect-btn" [routerLink]="['/tabs/gallery']">
-      Go to gallery
-    </ion-button>
+<!-- 🔥 DROPDOWN SHOULD BE HERE -->
+@if (searchSuggestions.length > 0) {
+  <div class="absolute top-[110px] left-0 right-0 z-50 mx-4 bg-white shadow-lg max-h-80 overflow-y-auto rounded-lg border">
+    <ion-list>
+      @for (item of searchSuggestions; track $index) {
+        <ion-item button (click)="onSearchSuggestionClick(item)">
+          <div class="flex flex-col py-2 gap-y-1">
+            <p class="font-medium text-gray-800">{{ item.title }}</p>
+            <p class="text-sm text-gray-600 truncate">{{ item.body}}</p>
+          </div>
+        </ion-item>
+      }
+    </ion-list>
   </div>
-  <ion-list>
-    @for (item of tasksList; track $index) {
-      <ion-item
-        [routerLink]="['/tabs/home', item.id]"
-        button
-      >
-        <div class="flex flex-col gap-2 bg-gray-200 w-full p-4 rounded-md">
-          <p class="text-lg font-semibold">{{item.title}}</p>
-          <p>{{item.description}}</p>
-        </div>
-      </ion-item>
-    }
-  </ion-list>
-  <ion-infinite-scroll>
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
+}
 
-  <!-- <router-outlet></router-outlet> -->
+<ion-content [fullscreen]="true">
+  <!-- Pull to Refresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Tabs -->
+  <ion-segment name="tabs" [(ngModel)]="selectedTab" (ionChange)="onTabChange($event)" class="sticky top-0 z-10 bg-white">
+    <ion-segment-button value="all">
+      <ion-label>All Posts</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="my">
+      <ion-label>My Posts</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Posts List -->
+  <div class="p-4">
+    @if (isLoading && currentPosts.length === 0) {
+      <!-- Loading skeleton -->
+      <div class="space-y-4">
+        @for (item of [1,2,3]; track $index) {
+          <ion-card class="m-0">
+            <ion-card-header>
+              <div class="animate-pulse">
+                <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                <div class="h-3 bg-gray-300 rounded w-1/2"></div>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="animate-pulse space-y-2">
+                <div class="h-3 bg-gray-300 rounded"></div>
+                <div class="h-3 bg-gray-300 rounded"></div>
+                <div class="h-3 bg-gray-300 rounded w-5/6"></div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    } @else if (currentPosts.length === 0) {
+      <!-- Empty state -->
+      <div class="flex flex-col items-center justify-center py-20 text-gray-500">
+        <ion-icon name="document-outline" class="text-6xl mb-4"></ion-icon>
+        <p class="text-lg font-semibold">No posts found</p>
+        <p class="text-sm">{{ selectedTab === 'my' ? 'You haven\'t created any posts yet' : 'No posts available' }}</p>
+      </div>
+    } @else {
+      <!-- Posts -->
+      <div class="space-y-4">
+        @for (post of currentPosts; track post.id) {
+          <ion-card class="m-0 shadow-sm hover:shadow-md transition-shadow">
+            <ion-card-header class="pb-2">
+              <!-- User info -->
+              <div class="flex items-center gap-2 mb-2">
+                <ion-icon name="person-circle-outline" class="text-3xl text-gray-600"></ion-icon>
+                <div>
+                  <p class="text-sm font-semibold text-gray-800">User {{ post.userId }}</p>
+                  <p class="text-xs text-gray-500">Just now</p>
+                </div>
+              </div>
+              
+              <!-- Post title -->
+              <ion-card-title class="text-lg font-bold text-gray-900 capitalize">
+                {{ post.title }}
+              </ion-card-title>
+            </ion-card-header>
+
+            <ion-card-content>
+              <!-- Post body -->
+              <p class="text-gray-700 mb-3 leading-relaxed">{{ post.body }}</p>
+              
+              <!-- Tags -->
+              @if (post.tags && post.tags.length > 0) {
+                <div class="flex flex-wrap gap-2 mb-3">
+                  @for (tag of post.tags; track tag) {
+                    <ion-badge color="primary" class="px-2 py-1">{{ tag }}</ion-badge>
+                  }
+                </div>
+              }
+
+              <!-- Stats -->
+              <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+                <div class="flex items-center gap-4">
+                  <!-- Likes -->
+                  <div class="flex items-center gap-1 text-gray-600">
+                    <ion-icon name="heart-outline" class="text-xl"></ion-icon>
+                    <span class="text-sm font-medium">{{ post.reactions.likes }}</span>
+                  </div>
+                  
+                  <!-- Dislikes -->
+                  <div class="flex items-center gap-1 text-gray-600">
+                    <ion-icon name="heart-dislike-outline" class="text-xl"></ion-icon>
+                    <span class="text-sm font-medium">{{ post.reactions.dislikes }}</span>
+                  </div>
+                  
+                  <!-- Views -->
+                  <div class="flex items-center gap-1 text-gray-600">
+                    <ion-icon name="eye-outline" class="text-xl"></ion-icon>
+                    <span class="text-sm font-medium">{{ post.views }}</span>
+                  </div>
+                </div>
+
+                <!-- View Detail -->
+                <ion-button 
+                  fill="clear" 
+                  size="small"
+                  [routerLink]="['/tabs/home', post.id]"
+                >
+                  View
+                </ion-button>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Infinite Scroll -->
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" threshold="100px">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more posts..."
+    >
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

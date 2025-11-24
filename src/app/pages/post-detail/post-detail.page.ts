@@ -6,9 +6,9 @@ import { ActivatedRoute } from '@angular/router';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 
 @Component({
-  selector: 'app-user-detail',
-  templateUrl: './user-detail.page.html',
-  styleUrls: ['./user-detail.page.scss'],
+  selector: 'app-post-detail',
+  templateUrl: './post-detail.page.html',
+  styleUrls: ['./post-detail.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -17,7 +17,7 @@ import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.compone
     AppHeaderComponent
   ]
 })
-export class UserDetailPage implements OnInit {
+export class PostDetailPage implements OnInit {
   id!: number;
 
   constructor(private route: ActivatedRoute) {
