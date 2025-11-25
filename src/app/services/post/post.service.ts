@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from "rxjs";
-import { IPost, IPostCommentPayload, IPostCommentsResponse, IPostsListPayload, IPostsListResponse } from "./types";
+import { IOtherUser, IPost, IPostCommentPayload, IPostCommentsResponse, IPostsListPayload, IPostsListResponse } from "./types";
 
 const postsListInitialState: IPostsListResponse = {
   posts: [],
@@ -136,6 +136,23 @@ export class PostService {
       }),
       catchError((error) => {
         console.error('❌ Failed to fetch comments:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
+   * Get user by userId
+   */
+
+  public fetchUserByUserId(userId: number): Observable<IOtherUser> {
+    let apiUrl = `https://dummyjson.com/users/${userId}`;
+    return this.http.get<any>(apiUrl).pipe(
+      tap((response) => {
+        console.log('👤 Fetched user:', response);
+      }),
+      catchError((error) => {
+        console.error('❌ Failed to fetch user:', error);
         return throwError(() => error);
       })
     );

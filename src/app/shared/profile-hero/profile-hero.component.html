@@ -1,0 +1,35 @@
+<div class="relative mb-4">
+  <div class="cover-image border-b border-b-gray-200">
+    <img [src]="image" alt="Profile cover" class="w-full h-full max-h-36 object-cover" />
+    <div class="cover-overlay"></div>
+  </div>
+  
+  <div class="px-4 pb-4 -mt-16 relative z-10">
+    <div class="relative w-32 h-32 mx-auto mb-3 border rounded-full bg-white border-gray-400 z-20">
+      <img [src]="image" [alt]="firstName" />
+    </div>
+
+    <div class="text-center">
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">{{firstName}} {{lastName}}</h1>
+      <p class="text-sm text-gray-500">@{{username}}</p>
+    </div>
+
+    @if (isCurrentUser) {
+      <div class="flex gap-2 justify-center mt-4">
+        <ion-button fill="outline" size="small" (click)="onEditProfile()">
+          <ion-icon slot="start" name="create-outline"></ion-icon>
+          Edit Profile
+        </ion-button>
+        <ion-button fill="clear" size="small" color="danger" (click)="onLogout()">
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          Logout
+        </ion-button>
+      </div>
+    } @else {
+      <div class="flex items-center justify-center gap-x-2 mt-2">
+        <ion-icon class="text-lg font-semibold" name="location-outline"></ion-icon>
+        <span class="font-medium">{{country}}</span>
+      </div>
+    }
+  </div>
+</div>

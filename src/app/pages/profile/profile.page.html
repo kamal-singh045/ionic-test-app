@@ -10,34 +10,14 @@
   } @else if (!isLoading && userData) {
     <div>
     <!-- Hero Section with Cover & Avatar -->
-      <div class="relative mb-4">
-        <div class="cover-image">
-          <img [src]="userData.image" alt="Profile cover" class="w-full h-full object-cover" />
-          <div class="cover-overlay"></div>
-        </div>
-        
-        <div class="px-4 pb-4 -mt-16 relative z-10">
-          <div class="relative w-32 h-32 mx-auto mb-3 border rounded-full bg-white border-gray-400 z-20">
-            <img [src]="userData.image" [alt]="userData.firstName" />
-          </div>
-          
-          <div class="text-center mb-4">
-            <h1 class="text-2xl font-bold text-gray-900 mb-1">{{userData.firstName}} {{userData.lastName}}</h1>
-            <p class="text-sm text-gray-500">@{{userData.username}}</p>
-          </div>
-
-          <div class="flex gap-2 justify-center">
-            <ion-button fill="outline" size="small" (click)="onEditProfile()">
-              <ion-icon slot="start" name="create-outline"></ion-icon>
-              Edit Profile
-            </ion-button>
-            <ion-button fill="clear" size="small" color="danger" (click)="onLogout()">
-              <ion-icon slot="start" name="log-out-outline"></ion-icon>
-              Logout
-            </ion-button>
-          </div>
-        </div>
-      </div>
+      <app-profile-hero
+        [firstName]="userData.firstName"
+        [lastName]="userData.lastName"
+        [username]="userData.username"
+        [image]="userData.image"
+        [gender]="userData.gender"
+        [country]="userData.address?.country ?? 'India'"
+      />
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-2 gap-3 px-4 pb-4">

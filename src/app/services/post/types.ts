@@ -13,7 +13,7 @@ export interface IPost {
     dislikes: number;
   },
   views: number;
-  userId: string;
+  userId: number;
 }
 
 export interface IPostsListResponse {
@@ -46,4 +46,23 @@ export interface IPostCommentsResponse {
   total: number;
   skip: number;
   limit: number;
+}
+
+// Get User by userId
+export interface IOtherUser {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  gender: string;
+  image: string;
+  address: {
+    address: string;
+    city: string;
+    country: string;
+    postalCode: string;
+    state: string;
+  }
+  age: number;
+  university: string;
 }

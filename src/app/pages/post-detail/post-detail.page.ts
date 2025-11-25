@@ -33,6 +33,7 @@ import {
   pencilSharp,
   trashBinSharp
 } from 'ionicons/icons';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-post-detail',
@@ -59,6 +60,7 @@ export class PostDetailPage implements OnInit {
   id!: number;
   postDetail: IPost | null = null;
   isPostLoading = false;
+  currentUserId: number | null = null;
 
   // comments
   comments: IPostComment[] = [];
@@ -72,7 +74,8 @@ export class PostDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private postsService: PostService
+    private postsService: PostService,
+    private userService: UserService
   ) {
     this.route.paramMap.subscribe(params => {
       this.id = Number(params.get('id'));
@@ -97,6 +100,7 @@ export class PostDetailPage implements OnInit {
   ngOnInit() {
     this.fetchPostDetail();
     this.fetchComments();
+    this.getCurrentUser();
   }
 
   /**
@@ -198,5 +202,12 @@ export class PostDetailPage implements OnInit {
    */
   redirectForEditing() {
     this.router.navigate(['/tabs/home/add-edit'], { queryParams: { id: this.id } });
+  }
+
+  /**
+   * get current user id
+   */
+  getCurrentUser() {
+    this.currentUserId = this.userService.getCurrentUserValue()?.id ?? null;
   }
 }

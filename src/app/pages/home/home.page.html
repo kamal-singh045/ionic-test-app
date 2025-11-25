@@ -77,71 +77,20 @@
       </div>
     } @else {
       <!-- Posts -->
-      <div class="space-y-4">
+      <div class="flex flex-col gap-y-4">
         @for (post of currentPosts; track post.id) {
-          <ion-card class="m-0 shadow-sm hover:shadow-md transition-shadow">
-            <ion-card-header class="pb-2">
-              <!-- User info -->
-              <div class="flex items-center gap-2 mb-2">
-                <ion-icon name="person-circle-outline" class="text-3xl text-gray-600"></ion-icon>
-                <div>
-                  <p class="text-sm font-semibold text-gray-800">User {{ post.userId }}</p>
-                  <p class="text-xs text-gray-500">Just now</p>
-                </div>
-              </div>
-              
-              <!-- Post title -->
-              <ion-card-title class="text-lg font-bold text-gray-900 capitalize">
-                {{ post.title }}
-              </ion-card-title>
-            </ion-card-header>
-
-            <ion-card-content>
-              <!-- Post body -->
-              <p class="text-gray-700 mb-3 leading-relaxed">{{ post.body }}</p>
-              
-              <!-- Tags -->
-              @if (post.tags && post.tags.length > 0) {
-                <div class="flex flex-wrap gap-2 mb-3">
-                  @for (tag of post.tags; track tag) {
-                    <ion-badge color="primary" class="px-2 py-1">{{ tag }}</ion-badge>
-                  }
-                </div>
-              }
-
-              <!-- Stats -->
-              <div class="flex items-center justify-between pt-3 border-t border-gray-200">
-                <div class="flex items-center gap-4">
-                  <!-- Likes -->
-                  <div class="flex items-center gap-1 text-gray-600">
-                    <ion-icon name="heart-outline" class="text-xl"></ion-icon>
-                    <span class="text-sm font-medium">{{ post.reactions.likes }}</span>
-                  </div>
-                  
-                  <!-- Dislikes -->
-                  <div class="flex items-center gap-1 text-gray-600">
-                    <ion-icon name="heart-dislike-outline" class="text-xl"></ion-icon>
-                    <span class="text-sm font-medium">{{ post.reactions.dislikes }}</span>
-                  </div>
-                  
-                  <!-- Views -->
-                  <div class="flex items-center gap-1 text-gray-600">
-                    <ion-icon name="eye-outline" class="text-xl"></ion-icon>
-                    <span class="text-sm font-medium">{{ post.views }}</span>
-                  </div>
-                </div>
-
-                <!-- View Detail -->
-                <ion-button 
-                  fill="clear" 
-                  size="small"
-                  [routerLink]="['/tabs/home', post.id]"
-                >
-                  View
-                </ion-button>
-              </div>
-            </ion-card-content>
-          </ion-card>
+          <app-post-card
+            [userId]="post.userId"
+            [postId]="post.id"
+            [title]="post.title"
+            [body]="post.body"
+            [tags]="post.tags"
+            [likes]="post.reactions.likes"
+            [dislikes]="post.reactions.dislikes"
+            [views]="post.views"
+            [usernameClickable]="selectedTab !== 'my'"
+            (goToUserProfileHandler)="goToUserProfile(post.userId)"
+          />
         }
       </div>
     }

@@ -8,13 +8,10 @@ import {
   IonInfiniteScrollContent,
   IonCard,
   IonCardHeader,
-  IonCardTitle,
   IonCardContent,
   IonIcon,
-  IonBadge,
   IonRefresher,
   IonRefresherContent,
-  IonButton,
   IonHeader,
   IonToolbar,
   IonList,
@@ -23,7 +20,7 @@ import {
   IonFabButton,
   IonSearchbar
 } from '@ionic/angular/standalone';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user/user.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { IPost } from 'src/app/services/post/types';
@@ -40,6 +37,7 @@ import {
   heartDislikeOutline,
   add
 } from 'ionicons/icons';
+import { PostCardComponent } from 'src/app/shared/post-card/post-card.component';
 
 type TabType = 'all' | 'my';
 
@@ -52,7 +50,6 @@ type TabType = 'all' | 'my';
     IonContent,
     CommonModule,
     FormsModule,
-    RouterLink,
     IonSegment,
     IonSegmentButton,
     IonLabel,
@@ -60,20 +57,18 @@ type TabType = 'all' | 'my';
     IonInfiniteScrollContent,
     IonCard,
     IonCardHeader,
-    IonCardTitle,
     IonCardContent,
     IonIcon,
-    IonBadge,
     IonRefresher,
     IonRefresherContent,
-    IonButton,
     IonHeader,
     IonToolbar,
     IonList,
     IonItem,
     IonFab,
     IonFabButton,
-    IonSearchbar
+    IonSearchbar,
+    PostCardComponent
   ],
 })
 export class HomePage implements OnInit, OnDestroy {
@@ -351,6 +346,17 @@ export class HomePage implements OnInit, OnDestroy {
    */
   addButtonClicked() {
     this.router.navigate(['/tabs/home/add-edit']); // will pass a query param of post Id in case of update
+  }
+
+  /**
+   * Go to User's profile
+   */
+  goToUserProfile(userId: number) {
+    this.router.navigate(['/tabs/home/user-profile'], {
+      queryParams: {
+        userId
+      }
+    });
   }
 
   /**

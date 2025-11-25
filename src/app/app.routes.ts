@@ -61,6 +61,10 @@ export const tabsRoutes: Routes = [
         loadComponent: () => import('./pages/add-edit-post/add-edit-post.page').then(m => m.AddEditPostPage)
       },
       {
+        path: 'home/user-profile',
+        loadComponent: () => import('./pages/user-profile/user-profile.page').then(m => m.UserProfilePage)
+      },
+      {
         path: 'home/:id',
         loadComponent: () => import('./pages/post-detail/post-detail.page').then(m => m.PostDetailPage)
       },

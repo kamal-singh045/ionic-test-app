@@ -1,0 +1,66 @@
+<app-app-header title="User Profile" [showBackButton]="true"></app-app-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  @if (isUserLoading) {
+    <div class="flex flex-col items-center justify-center h-64 gap-3">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p class="text-gray-500 text-sm">Loading profile...</p>
+    </div>
+  } @else {
+    <app-profile-hero
+      [firstName]="userData?.firstName ?? 'John'"
+      [lastName]="userData?.lastName ?? 'Doe'"
+      [username]="userData?.username ?? 'johndoe'"
+      [image]="userData?.image ?? ''"
+      [gender]="userData?.gender ?? 'male'"
+      [country]="userData?.address?.country ?? 'India'"
+    />
+  }
+
+  @if (isPostsLoading) {
+    <div class="space-y-4">
+      @for (item of [1,2,3]; track $index) {
+        <ion-card class="m-0">
+          <ion-card-header>
+            <div class="animate-pulse">
+              <div class="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+              <div class="h-3 bg-gray-300 rounded w-1/2"></div>
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <div class="animate-pulse space-y-2">
+              <div class="h-3 bg-gray-300 rounded"></div>
+              <div class="h-3 bg-gray-300 rounded"></div>
+              <div class="h-3 bg-gray-300 rounded w-5/6"></div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+    } @else {
+    <div class="flex flex-col gap-y-4 mt-3">
+      @for (post of userPosts; track post.id) {
+        <app-post-card
+          [userId]="post.userId"
+          [postId]="post.id"
+          [title]="post.title"
+          [body]="post.body"
+          [tags]="post.tags"
+          [likes]="post.reactions.likes"
+          [dislikes]="post.reactions.dislikes"
+          [views]="post.views"
+          [usernameClickable]="true"
+        />
+      }
+      <!-- Infinite Scroll -->
+      @if (hasMorePosts) {
+        <ion-infinite-scroll (ionInfinite)="loadMorePosts($event)">
+          <ion-infinite-scroll-content
+            loadingSpinner="bubbles"
+            loadingText="Loading more comments..."
+          ></ion-infinite-scroll-content>
+        </ion-infinite-scroll>
+      }
+    </div>
+  }
+</ion-content>

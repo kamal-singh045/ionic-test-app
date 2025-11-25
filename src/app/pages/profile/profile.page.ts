@@ -10,7 +10,6 @@ import {
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
-  IonButton,
   IonSpinner,
 } from '@ionic/angular/standalone';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
@@ -29,6 +28,7 @@ import {
 } from 'ionicons/icons';
 import { UserService } from 'src/app/services/user/user.service';
 import { IUser } from 'src/app/services/user/types';
+import { ProfileHeroComponent } from 'src/app/shared/profile-hero/profile-hero.component';
 
 @Component({
   selector: 'app-profile',
@@ -42,11 +42,11 @@ import { IUser } from 'src/app/services/user/types';
     IonCardContent,
     IonCardHeader,
     IonCardTitle,
-    IonButton,
     IonSpinner,
     CommonModule,
     ReactiveFormsModule,
     AppHeaderComponent,
+    ProfileHeroComponent
   ]
 })
 export class ProfilePage implements OnInit {
