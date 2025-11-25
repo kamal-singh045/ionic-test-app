@@ -9,6 +9,8 @@ import {
   IonButton
 } from '@ionic/angular/standalone';
 import { Router, RouterLink } from '@angular/router';
+import { addIcons } from 'ionicons';
+import { personCircleOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-post-card',
@@ -41,7 +43,11 @@ export class PostCardComponent implements OnInit {
 
   constructor(
     private router: Router
-  ) { }
+  ) {
+    addIcons({
+      personCircleOutline
+    });
+  }
 
   ngOnInit() { }
 
