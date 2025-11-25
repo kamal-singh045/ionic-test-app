@@ -92,8 +92,10 @@ export class UserProfilePage implements OnInit {
     if (this.isPostsLoading) return;
 
     if (isRefresh) {
+      this.postsSkip = 0;
       this.postsTotal = 0;
       this.userPosts = [];
+      this.hasMorePosts = true; // Reset hasMorePosts on refresh
     }
 
     this.isPostsLoading = true;
@@ -111,6 +113,9 @@ export class UserProfilePage implements OnInit {
         }
         this.postsTotal = response.total;
         this.postsSkip++;
+
+        // Check if there are more posts to load
+        this.hasMorePosts = this.userPosts.length < this.postsTotal;
         this.isPostsLoading = false;
       },
       error: (error) => {
