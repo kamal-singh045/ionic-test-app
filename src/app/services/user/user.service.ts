@@ -3,16 +3,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { BehaviorSubject, Observable, throwError } from "rxjs";
 import { tap, shareReplay, catchError, filter, take, map } from 'rxjs/operators';
-
-export interface IUser {
-  id: number;
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  gender: string;
-  image: string;
-}
+import { IUser } from "./types";
 
 @Injectable({
   providedIn: 'root'

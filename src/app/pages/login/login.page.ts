@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, FormGroup, FormsModule, Validators } 
 import { IonContent } from '@ionic/angular/standalone';
 import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
 import { ThemeInputComponent } from 'src/app/shared/theme-input/theme-input.component';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { Router } from '@angular/router';
 
 @Component({

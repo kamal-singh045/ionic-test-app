@@ -12,8 +12,9 @@ import {
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { CameraService } from 'src/app/services/camera.service';
 import { ThemeButtonComponent } from 'src/app/shared/theme-button/theme-button.component';
-import { IUser, UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { Subject } from 'rxjs';
+import { IUser } from 'src/app/services/user/types';
 
 @Component({
   selector: 'app-gallery',

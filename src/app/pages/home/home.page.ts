@@ -24,7 +24,7 @@ import {
   IonSearchbar
 } from '@ionic/angular/standalone';
 import { Router, RouterLink } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { UserService } from 'src/app/services/user/user.service';
 import { debounceTime, distinctUntilChanged, Subject, switchMap, takeUntil } from 'rxjs';
 import { IPost } from 'src/app/services/post/types';
 import { PostService } from 'src/app/services/post/post.service';

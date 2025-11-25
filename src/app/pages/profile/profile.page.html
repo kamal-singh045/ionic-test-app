@@ -1,104 +1,126 @@
 <app-app-header title="Profile"></app-app-header>
 
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>User Profile</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <form [formGroup]="profileForm">
-        <ion-list>
-          <!-- Email Field -->
-          <app-theme-input
-            label="Email"
-            type="email"
-            placeholder="Enter email"
-            formControlName="email"
-            [showError]="profileForm.controls['email'].dirty && profileForm.controls['email'].invalid"
-            [error]="getError('email')"
-          ></app-theme-input>
-
-          <!-- username Field -->
-          <app-theme-input
-            label="Username"
-            type="string"
-            placeholder="Enter username"
-            formControlName="username"
-            [showError]="profileForm.controls['username'].dirty && profileForm.controls['username'].invalid"
-            [error]="getError('username')"
-          ></app-theme-input>
-
-          <!-- First Name Field -->
-          <app-theme-input
-            label="First Name"
-            type="text"
-            placeholder="Enter first name"
-            formControlName="firstName"
-            [showError]="profileForm.controls['firstName'].dirty && profileForm.controls['firstName'].invalid"
-            [error]="getError('firstName')"
-          ></app-theme-input>
-          
-          <!-- Last Name Field -->
-          <app-theme-input
-            label="Last Name"
-            type="string"
-            placeholder="Enter last number"
-            formControlName="lastName"
-            [showError]="profileForm.controls['lastName'].dirty && profileForm.controls['lastName'].invalid"
-            [error]="getError('lastName')"
-          ></app-theme-input>
-
-          <!-- Designation Dropdown -->
-          <ion-item>
-            <ion-label position="stacked">Gender</ion-label>
-            <ion-select
-              formControlName="gender"
-              placeholder="Select your gender"
-              interface="popover"
-              >
-              @for (gender of genders; track gender) {
-                <ion-select-option [value]="gender">{{gender.toUpperCase()}}</ion-select-option>
-              }
-            </ion-select>
-          </ion-item>
-          @if (hasError('gender', 'required')) {
-            <div class="error-message">Designation is required</div>
-          }
-        </ion-list>
-
-        <!-- Action Buttons -->
-        <div class="button-container">
-           @if (!isEditing) {
-              <app-theme-button
-                [title]="'Edit'"
-                [variant]="'primary'"
-                [fill]="'solid'"
-                [size]="'md'"
-                [iconStart]="'create-outline'"
-                (handler)="enableEdit()"
-              ></app-theme-button>
-           } @else {
-              <div class="edit-buttons">
-                <app-theme-button
-                  [title]="'Save'"
-                  [variant]="'success'"
-                  [iconStart]="'save-outline'"
-                  (handler)="saveProfile()"
-                  [disabled]="!profileForm.valid"
-                ></app-theme-button>
-
-                <app-theme-button
-                  [title]="'Cancel'"
-                  [variant]="'transparent'"
-                  [fill]="'outline'"
-                  iconStart="close-outline"
-                  (handler)="cancelEdit()"
-                ></app-theme-button>
-              </div>
-            }
+<ion-content [fullscreen]="true">
+  <!-- Loading State -->
+  @if (isLoading) {
+    <div class="flex flex-col items-center justify-center h-screen gap-3">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p class="text-gray-500 text-sm">Loading profile...</p>
+    </div>
+  } @else if (!isLoading && userData) {
+    <div>
+    <!-- Hero Section with Cover & Avatar -->
+      <div class="relative mb-4">
+        <div class="cover-image">
+          <img [src]="userData.image" alt="Profile cover" class="w-full h-full object-cover" />
+          <div class="cover-overlay"></div>
         </div>
-      </form>
-    </ion-card-content>
-  </ion-card>
+        
+        <div class="px-4 pb-4 -mt-16 relative z-10">
+          <div class="relative w-32 h-32 mx-auto mb-3 border rounded-full bg-white border-gray-400 z-20">
+            <img [src]="userData.image" [alt]="userData.firstName" />
+          </div>
+          
+          <div class="text-center mb-4">
+            <h1 class="text-2xl font-bold text-gray-900 mb-1">{{userData.firstName}} {{userData.lastName}}</h1>
+            <p class="text-sm text-gray-500">@{{userData.username}}</p>
+          </div>
+
+          <div class="flex gap-2 justify-center">
+            <ion-button fill="outline" size="small" (click)="onEditProfile()">
+              <ion-icon slot="start" name="create-outline"></ion-icon>
+              Edit Profile
+            </ion-button>
+            <ion-button fill="clear" size="small" color="danger" (click)="onLogout()">
+              <ion-icon slot="start" name="log-out-outline"></ion-icon>
+              Logout
+            </ion-button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-2 gap-3 px-4 pb-4">
+        <div class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
+          <ion-icon name="stats-chart-outline" color="primary" class="text-3xl"></ion-icon>
+          <div class="flex flex-col">
+            <span class="text-2xl font-bold text-gray-900 leading-none mb-1">0</span>
+            <span class="text-xs text-gray-500 font-medium">Posts</span>
+          </div>
+        </div>
+        
+        <div class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5">
+          <ion-icon name="calendar-outline" color="success" class="text-3xl"></ion-icon>
+          <div class="flex flex-col">
+            <span class="text-2xl font-bold text-gray-900 leading-none mb-1">{{userData.age}}</span>
+            <span class="text-xs text-gray-500 font-medium">Years</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Personal Information Card -->
+      <ion-card class="info-card">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="person-outline"></ion-icon>
+            Personal Information
+          </ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <ion-icon name="mail-outline" class="text-base"></ion-icon>
+                <span>Email</span>
+              </div>
+              <div class="text-base font-medium text-gray-900 pl-6">{{userData.email}}</div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <ion-icon [name]="userData.gender === 'male' ? 'male-outline' : 'female-outline'" class="text-base"></ion-icon>
+                <span>Gender</span>
+              </div>
+              <div class="text-base font-medium text-gray-900 pl-6">{{userData.gender | titlecase}}</div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <ion-icon name="calendar-outline" class="text-base"></ion-icon>
+                <span>Age</span>
+              </div>
+              <div class="text-base font-medium text-gray-900 pl-6">{{userData.age}} years old</div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                <ion-icon name="school-outline" class="text-base"></ion-icon>
+                <span>University</span>
+              </div>
+              <div class="text-base font-medium text-gray-900 pl-6">{{userData.university}}</div>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Address Card -->
+      <ion-card class="info-card" *ngIf="userData.address">
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="location-outline"></ion-icon>
+            Address
+          </ion-card-title>
+        </ion-card-header>
+        
+        <ion-card-content>
+          <div class="flex flex-col gap-2">
+            <p class="text-base font-medium text-gray-900 leading-relaxed m-0">{{userData.address.address}}</p>
+            <p class="text-base font-medium text-gray-900 leading-relaxed m-0">{{userData.address.city}}, {{userData.address.state}} - {{userData.address.postalCode}}</p>
+            <p class="text-base font-semibold text-blue-600 leading-relaxed m-0">{{userData.address.country}}</p>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  }
 </ion-content>
