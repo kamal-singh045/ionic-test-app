@@ -1,5 +1,124 @@
-<app-app-header [title]="postId ? 'Edit Post' : 'Create new post'" [showBackButton]="true"></app-app-header>
+<app-app-header 
+  [title]="isEditMode ? 'Edit Post' : 'Create New Post'" 
+  [showBackButton]="true">
+</app-app-header>
 
-<ion-content [fullscreen]="true">
-  <p>{{postId}}</p>
+<ion-content class="ion-padding">
+  <div class="max-w-3xl mx-auto">
+    @if (isPostLoading) {
+      <!-- Loading State -->
+      <div class="flex items-center justify-center py-20">
+        <div class="text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p class="text-gray-500">Loading post...</p>
+        </div>
+      </div>
+    } @else {
+      <!-- Form -->
+      <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="space-y-4">
+        <!-- Title Field -->
+        <div class="form-section">
+          <div class="flex items-center gap-2 mb-3">
+            <ion-icon name="document-text-outline" class="text-2xl text-blue-500"></ion-icon>
+            <h2 class="text-lg font-semibold text-gray-900">Post Title</h2>
+          </div>
+          <app-theme-input
+            label="Title"
+            placeholder="Enter your post title"
+            formControlName="title"
+            [error]="title?.touched && title?.invalid ? 'Title is required (3-100 characters)' : ''"
+            [showError]="!!(title?.touched && title?.invalid)"
+          ></app-theme-input>
+        </div>
+
+        <!-- Body Field -->
+        <div class="form-section">
+          <div class="flex items-center gap-2 mb-3">
+            <ion-icon name="document-text-outline" class="text-2xl text-green-500"></ion-icon>
+            <h2 class="text-lg font-semibold text-gray-900">Post Content</h2>
+          </div>
+          <div class="textarea-wrapper">
+            <label class="block text-sm text-gray-600 mb-1">Content</label>
+            <ion-textarea
+              formControlName="body"
+              placeholder="Write your post content here..."
+              rows="8"
+              auto-grow="true"
+              class="custom-textarea"
+              [class.error]="body?.touched && body?.invalid"
+            ></ion-textarea>
+            @if (body?.touched && body?.invalid) {
+              <p class="text-red-500 text-xs mt-1">Content is required (10-1000 characters)</p>
+            }
+            <div class="text-right text-xs text-gray-500 mt-1">
+              {{ body?.value?.length || 0 }} / 1000 characters
+            </div>
+          </div>
+        </div>
+
+        <!-- Tags Field -->
+        <div class="form-section">
+          <div class="flex items-center gap-2 mb-3">
+            <ion-icon name="pricetags-outline" class="text-2xl text-purple-500"></ion-icon>
+            <h2 class="text-lg font-semibold text-gray-900">Tags</h2>
+          </div>
+          
+          <!-- Tag Input -->
+          <div class="flex gap-2 mb-3">
+            <input
+              type="text"
+              [(ngModel)]="currentTag"
+              [ngModelOptions]="{standalone: true}"
+              placeholder="Add a tag..."
+              (keyup.enter)="addTag()"
+              class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <button
+              type="button"
+              (click)="addTag()"
+              [disabled]="!currentTag.trim()"
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+            >
+              Add
+            </button>
+          </div>
+
+          <!-- Tags Display -->
+          @if (tags.length > 0) {
+            <div class="flex flex-wrap">
+              @for (tag of tags; track tag) {
+                <ion-chip color="secondary" class="tag-chip">
+                  <ion-label>{{ tag }}</ion-label>
+                  <ion-icon name="close-circle" (click)="removeTag(tag)" class="cursor-pointer"></ion-icon>
+                </ion-chip>
+              }
+            </div>
+          } @else {
+            <div class="p-4 bg-gray-50 rounded-lg text-center text-gray-500 text-sm">
+              No tags added yet. Add some tags to categorize your post.
+            </div>
+          }
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end gap-3 pt-6 border-t border-gray-200">
+          <app-theme-button
+            title="Cancel"
+            variant="transparent"
+            [expand]="'block'"
+            (handler)="onCancel()"
+          ></app-theme-button>
+          
+          <app-theme-button
+            [title]="isEditMode ? 'Update Post' : 'Create Post'"
+            variant="primary"
+            type="submit"
+            [loading]="isSaving"
+            [disabled]="postForm.invalid || isSaving"
+            [expand]="'block'"
+          ></app-theme-button>
+        </div>
+      </form>
+    }
+  </div>
 </ion-content>
