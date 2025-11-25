@@ -32,7 +32,12 @@
               </ion-chip>
             </div>
             <div class="flex items-center">
-              <ion-button class="edit-delete-button" fill="clear" color="medium">
+              <ion-button
+                (click)="redirectForEditing()"
+                class="edit-delete-button"
+                fill="clear"
+                color="medium"
+              >
                 <ion-icon name="pencil-sharp"></ion-icon>
               </ion-button>
               <ion-button class="edit-delete-button" fill="clear" color="danger">

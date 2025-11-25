@@ -13,7 +13,7 @@ import {
   IonInfiniteScrollContent,
   IonTextarea
 } from '@ionic/angular/standalone';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppHeaderComponent } from 'src/app/shared/app-header/app-header.component';
 import { IPost, IPostComment } from 'src/app/services/post/types';
 import { PostService } from 'src/app/services/post/post.service';
@@ -71,6 +71,7 @@ export class PostDetailPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private postsService: PostService
   ) {
     this.route.paramMap.subscribe(params => {
@@ -190,5 +191,12 @@ export class PostDetailPage implements OnInit {
     this.comments.unshift(mockComment);
     this.totalComments++;
     this.newComment = '';
+  }
+
+  /**
+   * Redirect for editing
+   */
+  redirectForEditing() {
+    this.router.navigate(['/tabs/home/add-edit'], { queryParams: { id: this.id } });
   }
 }

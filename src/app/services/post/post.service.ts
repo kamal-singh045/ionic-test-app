@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, catchError, Observable, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, Observable, shareReplay, tap, throwError } from "rxjs";
 import { IPost, IPostCommentPayload, IPostCommentsResponse, IPostsListPayload, IPostsListResponse } from "./types";
 
 const postsListInitialState: IPostsListResponse = {
@@ -16,6 +16,9 @@ const postsListInitialState: IPostsListResponse = {
 export class PostService {
   private postsListSubject = new BehaviorSubject<IPostsListResponse>(postsListInitialState);
   public postsList$ = this.postsListSubject.asObservable();
+
+  // Cache for posts by ID using shareReplay
+  private postsCache = new Map<number, Observable<IPost>>();
 
   constructor(
     private http: HttpClient
@@ -76,17 +79,48 @@ export class PostService {
   /**
    * Fetch post by id
    */
-  public fetchPostById(id: number): Observable<IPost> {
-    let apiUrl = `https://dummyjson.com/posts/${id}`;
-    return this.http.get<IPost>(apiUrl).pipe(
-      tap((response) => {
-        console.log('📝 Fetched post:', response);
-      }),
-      catchError((error) => {
-        console.error('❌ Failed to fetch post:', error);
-        return throwError(() => error);
-      })
-    );
+  public fetchPostById(id: number, forceRefresh: boolean = false): Observable<IPost> {
+    // If forcing refresh, clear the cache for this post
+    if (forceRefresh) {
+      this.postsCache.delete(id);
+    }
+
+    // Check if we have a cached observable
+    if (!this.postsCache.has(id)) {
+      // Create new observable with shareReplay
+      const post$ = this.http.get<IPost>(`https://dummyjson.com/posts/${id}`).pipe(
+        tap((response) => {
+          console.log('📝 Fetched post from API:', response);
+        }),
+        catchError((error) => {
+          console.error('❌ Failed to fetch post:', error);
+          // Remove from cache on error
+          this.postsCache.delete(id);
+          return throwError(() => error);
+        }),
+        shareReplay({ bufferSize: 1, refCount: true })
+      );
+
+      // Store in cache
+      this.postsCache.set(id, post$);
+    } else {
+      console.log('📦 Returning cached observable for post:', id);
+    }
+
+    return this.postsCache.get(id)!;
+  }
+
+  /**
+   * Clear post cache for specific ID or all posts
+   */
+  public clearPostCache(id?: number): void {
+    if (id) {
+      this.postsCache.delete(id);
+      console.log('🗑️ Cleared cache for post:', id);
+    } else {
+      this.postsCache.clear();
+      console.log('🗑️ Cleared all posts cache');
+    }
   }
 
   /**

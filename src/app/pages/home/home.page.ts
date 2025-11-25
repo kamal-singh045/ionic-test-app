@@ -19,6 +19,8 @@ import {
   IonToolbar,
   IonList,
   IonItem,
+  IonFab,
+  IonFabButton,
   IonSearchbar
 } from '@ionic/angular/standalone';
 import { Router, RouterLink } from '@angular/router';
@@ -35,7 +37,8 @@ import {
   eyeOutline,
   personCircleOutline,
   documentOutline,
-  heartDislikeOutline
+  heartDislikeOutline,
+  add
 } from 'ionicons/icons';
 
 type TabType = 'all' | 'my';
@@ -68,6 +71,8 @@ type TabType = 'all' | 'my';
     IonToolbar,
     IonList,
     IonItem,
+    IonFab,
+    IonFabButton,
     IonSearchbar
   ],
 })
@@ -109,7 +114,8 @@ export class HomePage implements OnInit, OnDestroy {
       eyeOutline,
       personCircleOutline,
       documentOutline,
-      heartDislikeOutline
+      heartDislikeOutline,
+      add
     });
   }
 
@@ -338,6 +344,13 @@ export class HomePage implements OnInit, OnDestroy {
     setTimeout(() => {
       event.target.complete();
     }, 1000);
+  }
+
+  /**
+   * Add Floating button clicked
+   */
+  addButtonClicked() {
+    this.router.navigate(['/tabs/home/add-edit']); // will pass a query param of post Id in case of update
   }
 
   /**
